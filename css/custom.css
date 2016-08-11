@@ -75,6 +75,9 @@ body {
 #game:not(.completed) .cell:hover {
   background-color: #fef6eb;
 }
+#game.completed {
+  opacity: 0.5;
+}
 .cell.marker-x {
   color: #c25b56;
 }

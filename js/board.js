@@ -1,14 +1,15 @@
 var Board = TTT.Board = function($el,rows) {
   this.currentPlayer = 'x';
   this.rows = rows;
+  this.moves = 0;
   this.board = _blankboard(rows);
-  this.checkWin();
 };
 
 Board.prototype.move = function(pos) {
   var boardCell = this.board[pos[0]][pos[1]];
   if (boardCell === '.') {
     this.board[pos[0]][pos[1]] = this.currentPlayer;
+    this.moves += 1;
     return this.currentPlayer;
   } else {
     return false;
@@ -24,6 +25,7 @@ Board.prototype.swapPlayer = function() {
 };
 
 Board.prototype.resetBoard = function() {
+  this.moves = 0;
   this.board = _blankboard(this.rows);
 };
 
@@ -46,6 +48,12 @@ Board.prototype.checkWin = function() {
     }
   });
   return won;
+};
+
+Board.prototype.checkTie = function() {
+  if (this.moves == this.rows * this.rows) {
+    return true;
+  }
 };
 
 _validWins = function(rows) {

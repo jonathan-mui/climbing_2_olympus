@@ -36,38 +36,53 @@ Game.prototype.setupBoard = function() {
 };
 
 Game.prototype.bindListeners = function() {
-  var that = this;
-  $('.cell').click(function() {
-    var row = $(this).data('row');
-    var col = $(this).data('col');
-    var marker = that.board.move([row,col]);
-    if (!!marker) {
-      $('.cell.row-' + row + '.col-' + col).html(marker).addClass('marker-' + marker);
-    } else {
-      that.$announcement.text('Oops, that cell is taken!');
-      return;
-    }
-    won = that.board.checkWin();
-    if (!!won) {
-      won.forEach(function(pair) {
-        $('.cell.row-' + pair[0] + '.col-' + pair[1]).addClass('win');
-      });
-      that.$el.addClass('completed');
-      that.$announcement.text(that.board.currentPlayer + ' wins!');
-      $('.cell').off();
-      return;
-    }
-    that.board.swapPlayer();
-    that.turnAnnouncement();
-  });
-  this.$reset.click(this.resetBoard.bind(this));
+  $('.cell').click(this.clickListener.bind(this));
+  this.$reset.click(this.resetBoardListener.bind(this));
+};
+
+Game.prototype.clickListener = function(e) {
+  var row = $(e.target).data('row');
+  var col = $(e.target).data('col');
+  var marker = this.board.move([row,col]);
+  if (!!marker) {
+    $('.cell.row-' + row + '.col-' + col).html(marker).addClass('marker-' + marker);
+  } else {
+    this.$announcement.text('Oops, this cell is taken!');
+    return;
+  }
+  if (this.winAnnouncement()) return;
+  if (this.checkTie()) return;
+  this.board.swapPlayer();
+  this.turnAnnouncement();
+};
+
+Game.prototype.winAnnouncement = function() {
+  won = this.board.checkWin();
+  if (!!won) {
+    won.forEach(function(pair) {
+      $('.cell.row-' + pair[0] + '.col-' + pair[1]).addClass('win');
+    });
+    this.$el.addClass('completed');
+    this.$announcement.text(this.board.currentPlayer + ' wins!');
+    $('.cell').off();
+    return true;
+  }
+};
+
+Game.prototype.checkTie = function() {
+  if (this.board.checkTie()) {
+    this.$announcement.text('Looks like a draw!');
+    this.$el.addClass('completed');
+    $('.cell').off();
+    return true;
+  }
 };
 
 Game.prototype.turnAnnouncement = function() {
   this.$announcement.text('Player ' + this.board.currentPlayer + "'s turn!");
 };
 
-Game.prototype.resetBoard = function( ){
+Game.prototype.resetBoardListener = function( ){
   this.board.resetBoard();
   this.setupBoard();
 };
