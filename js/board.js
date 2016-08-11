@@ -1,28 +1,14 @@
-(function() {
-  if (typeof TTT === 'undefined') {
-    window.TTT = {};
-  }
-})();
-
 var Board = TTT.Board = function($el,rows) {
   this.currentPlayer = 'x';
   this.rows = rows;
   this.board = _blankboard(rows);
-  this.renderBoard();
   this.checkWin();
-};
-
-Board.prototype.renderBoard = function() {
-  this.board.forEach(function(row,idx) {
-    console.log(row);
-  });
 };
 
 Board.prototype.move = function(pos) {
   var boardCell = this.board[pos[0]][pos[1]];
   if (boardCell === '.') {
     this.board[pos[0]][pos[1]] = this.currentPlayer;
-    this.renderBoard();
     return this.currentPlayer;
   } else {
     return false;
@@ -39,7 +25,6 @@ Board.prototype.swapPlayer = function() {
 
 Board.prototype.resetBoard = function() {
   this.board = _blankboard(this.rows);
-  this.renderBoard();
 };
 
 Board.prototype.checkWin = function() {
