@@ -1,0 +1,94 @@
+body {
+  text-align: center;
+  font-family: sans-serif;
+  font-weight: bold;
+  color: #525564;
+}
+#title {
+  font-size: 60px;
+  line-height: 80px;
+}
+#game {
+  display: inline-block;
+  border: 5px solid #beb9b5;
+}
+#announcement {
+  background-color: #74828f;
+  color: white;
+  font-size: 12px;
+  width: 320px;
+  margin: auto;
+  padding: 10px;
+  line-height: 12px;
+  margin: 10px auto 20px auto;
+}
+#reset {
+  display: block;
+  margin: auto;
+}
+#grid-size {
+  padding: 10px;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+  border: 1px solid #ddd;
+  margin-right: -6px;
+}
+#grid-size:focus, #play:focus, #reset:focus {
+  outline: none;
+}
+#play, #reset {
+  padding: 10px;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  border: 0;
+  background-color: red;
+  height: 35px;
+  color: white;
+  background-color: #c25b56;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+}
+#reset {
+  margin-top: 20px;
+  border-radius: 5px;
+}
+#play:hover, #reset:hover {
+  opacity: 0.5;
+}
+#error {
+  color: red;
+  font-size: 10px;
+  font-weight: 400;
+  padding: 5px;
+}
+.row {
+  margin: auto;
+}
+.cell {
+  border: 5px solid #beb9b5;
+  float: left;
+  cursor: pointer;
+  background-color: white;
+}
+#game:not(.completed) .cell:hover {
+  background-color: #fef6eb;
+}
+.cell.marker-x {
+  color: #c25b56;
+}
+.cell.marker-o {
+  color: #96c0ce;
+}
+.cell.win {
+  background-color: #fef6eb;
+}
+#game:after, .row:after {
+  display: block;
+  clear: both;
+  content: '';
+}
+.hide {
+  display: none;
+}
