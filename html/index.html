@@ -7,5 +7,37 @@
     <link href="../css/custom.css" rel="stylesheet" type="text/css">
   </head>
   <body>
+    <div id="title">Tic Tac Toe</div>
+    <div id="choose-size">
+      <label>
+        Please input the size of the grid you'd like to play
+        <br/><br/>
+        <input type="number" id="grid-size"/>
+      </label>
+      <button id="play">Play!</button>
+      <div id="error"></div>
+    </div>
+    <div id="game-wrapper" class="hide">
+      <div id="announcement"></div>
+      <div id="game"></div>
+      <button id="reset">Reset Game?</button>
+    </div>
+    <script type="text/javascript">
+      $(document).ready(function() {
+        $('#play').click(function() {
+          var gridSize = $('#grid-size').val();
+          if (gridSize < 2) {
+            $('#error').text("Please select a grid size larger than 1")
+            return
+          }
+          $('#choose-size').addClass('hide');
+          $('#game-wrapper').removeClass('hide');
+          var $el = $('#game');
+          var $reset = $('#reset');
+          var $announcement = $('#announcement')
+          game = new TTT.Game($el, gridSize, $reset, $announcement);
+        })
+      })
+    </script>
   </body>
 </html>
