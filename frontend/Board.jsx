@@ -49,6 +49,23 @@ class Board extends React.PureComponent {
     )
   }
 
+  getOrdinal(n) {
+    const s=["th","st","nd","rd"];
+    const v = n % 100;
+    return n+(s[(v-20)%10]||s[v]||s[0]);
+  }
+
+  renderPlayerName(idx, name) {
+    return (
+      <div key={idx} className="board--player">
+        <div className={`board--playerNumber board--playerNumber-${idx + 1}`}>
+          {this.getOrdinal(idx + 1)}
+        </div>
+        <div className="board--playerName">{name}</div>
+      </div>
+    )
+  }
+
   render() {
     return (
       <div>
@@ -62,11 +79,13 @@ class Board extends React.PureComponent {
             <div className="rollDice">
               Click to roll the dice
             </div>
-            Players
-            <div>hi</div>
-            <div>hi</div>
-            <div>hi</div>
-            <button>Start Over</button>
+            <div>
+              <div className="board--players">Players</div>
+              {this.props.nameOfPlayers.map((name, idx) => {
+                return this.renderPlayerName(idx, name);
+              })}
+              <button className="button board--startOver">Start Over</button>
+            </div>
           </aside>
           <div className="content">
             {this.renderGrid()}
@@ -75,6 +94,10 @@ class Board extends React.PureComponent {
       </div>
     )
   }
+}
+
+Board.defaultProps = {
+  nameOfPlayers:['Oscar', 'Jonathan', 'Jean Paul', 'Twinkie', 'Andre', 'Dawn'],
 }
 
 export default Board;

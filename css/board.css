@@ -1,12 +1,14 @@
 .container {
   display: flex;
 }
+
 .leftSidebar {
   background-color: #C5C3F4;
   width: 400px;
-  box-shadow: 0 5px 10px rgba(0,0, 0, 0.3);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
   z-index: 5;
 }
+
 .grid {
   width: 700px;
   margin: auto;
@@ -28,7 +30,6 @@
   width: 50px;
   height: 50px;
   float: left;
-
   box-sizing: border-box;
   background-image: url('../images/cellbg.png');
   background-size: cover;
@@ -36,5 +37,67 @@
 
 .cell-starred {
   background-image: url('../images/starcell.png');
+}
 
+.board--players {
+  padding: 24px;
+  border-bottom: 1px solid white;
+  text-transform: uppercase;
+  font-size: 21px;
+}
+
+.board--player {
+  background-color: rgba(255, 255, 255, 0.7);
+  margin: 24px;
+}
+
+.board--playerNumber {
+  padding: 12px;
+  background-color: green;
+  width: 30px;
+  text-align: center;
+  display: inline-block;
+  font-weight: bold;
+}
+
+.board--playerNumber-1 {
+  background-color: #92BF64;
+}
+
+.board--playerNumber-2 {
+  background-color: #EAA845;
+}
+
+.board--playerNumber-3 {
+  background-color: #B5405B;
+}
+
+.board--playerNumber-4 {
+  background-color: #406DB2;
+}
+
+.board--playerNumber-5 {
+  background-color: #B240AC;
+}
+
+.board--playerNumber-6 {
+  background-color: #E5DF72;
+}
+
+.board--playerName {
+  padding: 12px;
+  color: #555;
+  display: inline-block;
+}
+
+.board--startOver {
+  background-color: #C5C3F4;
+  border: 1px solid white;
+  color: white;
+  width: calc(100% - 48px);
+  margin: 24px;
+}
+
+.board--startOver:hover {
+  background-color: #7872E8;
 }

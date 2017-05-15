@@ -11,6 +11,7 @@ class NamePlayerModal extends React.PureComponent {
     }
     this.addValidName = this.addValidName.bind(this);
     this.removeValidName = this.removeValidName.bind(this);
+    this.saveNamesAndStartGame = this.saveNamesAndStartGame.bind(this);
   }
 
   addValidName(val) {
@@ -39,12 +40,20 @@ class NamePlayerModal extends React.PureComponent {
     )
   }
 
+  saveNamesAndStartGame() {
+    const map = [];
+    $("input").each(function() {
+      map.push($(this).val());
+    });
+    this.props.saveNamesAndStartGame(map);
+  }
+
   renderButton() {
     if (this.state.validNames.length === this.props.numOfPlayers) {
       return (
         <div
           className="button modalButton"
-          onClick={this.props.saveNamesAndStartGame}
+          onClick={this.saveNamesAndStartGame}
         >
           Start
         </div>
