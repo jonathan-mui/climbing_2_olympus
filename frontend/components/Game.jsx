@@ -13,9 +13,14 @@ class Game extends React.PureComponent {
       numOfPlayers: null,
       nameOfPlayers: undefined,
     }
+    this.startOver = this.startOver.bind(this);
     this.playGame = this.playGame.bind(this);
     this.saveNumOfPlayers = this.saveNumOfPlayers.bind(this);
     this.saveNamesAndStartGame = this.saveNamesAndStartGame.bind(this);
+  }
+
+  startOver() {
+    this.setState({ phase: null });
   }
 
   playGame() {
@@ -57,7 +62,7 @@ class Game extends React.PureComponent {
 
     if (this.state.phase === BOARD) {
       return (
-        <Board nameOfPlayers={this.state.nameOfPlayers} />
+        <Board nameOfPlayers={this.state.nameOfPlayers} startOver={this.startOver}/>
       )
     }
 

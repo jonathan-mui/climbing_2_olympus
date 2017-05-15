@@ -72,7 +72,7 @@ class Board extends React.PureComponent {
         <header className="header">
           <img src="../images/logo.png" className="logo" />
           <div className="title">Climbing 2 Olympus</div>
-          <i className="icon ion-close header--close" />
+          <i className="icon ion-close header--close" onClick={this.props.startOver} />
         </header>
         <div className="container">
           <aside className="leftSidebar">
@@ -84,7 +84,12 @@ class Board extends React.PureComponent {
               {this.props.nameOfPlayers.map((name, idx) => {
                 return this.renderPlayerName(idx, name);
               })}
-              <button className="button board--startOver">Start Over</button>
+              <button
+                className="button board--startOver"
+                onClick={this.props.startOver}
+              >
+                Start Over
+              </button>
             </div>
           </aside>
           <div className="content">

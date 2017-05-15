@@ -73,8 +73,8 @@ body {
 }
 
 .icon-close {
-  font-size : 18px;
   float: right;
+  font-size : 18px;
   -webkit-text-stroke: 1px #7872E8;
 }
 
@@ -223,4 +223,5 @@ body {
 
 .header--close {
   -webkit-text-stroke: 1px white;
+  cursor: pointer;
 }
