@@ -4,8 +4,8 @@
   }
 })();
 
-var Game = CLIMBING2OLYMPUS.Game = function($el,rows,$reset,$announcement) {
-  this.board = new Board($el,rows, $reset);
+var Game = CLIMBING2OLYMPUS.Game = function($el, rows, $reset, $announcement) {
+  this.board = new Board($el, rows, $reset);
   this.rows = rows;
   this.$el = $el;
   this.$reset = $reset;
