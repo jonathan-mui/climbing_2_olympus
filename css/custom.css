@@ -1,97 +1,177 @@
 body {
-  text-align: center;
-  font: 11px sans-serif;
-  font-weight: bold;
-  color: #525564;
-}
-#title {
-  font-size: 60px;
-  line-height: 80px;
-}
-#game {
-  display: inline-block;
-  border: 5px solid #beb9b5;
-}
-#announcement {
-  background-color: #74828f;
+  margin: 0;
+  font-family: Helvetica, sans-serif;
   color: white;
-  font-size: 12px;
-  width: 320px;
-  margin: auto;
-  padding: 10px;
-  line-height: 12px;
-  margin: 10px auto 20px auto;
+  font-weight: 300;
 }
-#reset {
+
+.start {
+  background-image: url('../images/landing1.png');
+  background-size: cover;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+}
+
+.button {
+  border: 0;
+  text-transform: uppercase;
+  font-weight: 300;
+  font-size: 21px;
+  letter-spacing: 2px;
+  padding: 10px 35px;
   display: block;
   margin: auto;
+  cursor: pointer;
+  transition: background-color 300ms ease;
 }
-#grid-size {
-  padding: 10px;
-  border-top-left-radius: 5px;
-  border-bottom-left-radius: 5px;
-  border: 1px solid #ddd;
-  margin-right: -6px;
+
+.play {
+  background-color: #E1704B;
+  color: white;
+  margin-top: 39.3%;
 }
-#grid-size:focus, #play:focus, #reset:focus {
+
+.play:hover {
+  background-color: #B0322F;
+}
+
+.play:focus {
   outline: none;
 }
-#play, #reset {
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal {
+  width: 600px;
+  background-color: white;
+  margin: 12% auto;
+}
+
+.modal--header {
+  background-color: #7872E8;
   padding: 10px;
-  border-top-right-radius: 5px;
-  border-bottom-right-radius: 5px;
-  border: 0;
-  background-color: red;
-  height: 35px;
-  color: white;
-  background-color: #c25b56;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+  text-align: center;
+  font-size: 18px;
+}
+
+.modal--body {
+  padding: 20px;
+}
+
+.icon-close {
+  font-size: 18px;
+  -webkit-text-stroke: 1px #7872E8;
+  float: right;
+}
+
+.playerModal--body {
+  width: 75%;
+  margin: 20px auto;
+}
+
+.playerModal--select {
+  position: relative;
+  border: 1px solid #7872E8;
+  color: #C5C3F4;
+  margin: 20px auto 5px;
+  padding: 12px;
   cursor: pointer;
 }
-#reset {
-  margin-top: 20px;
-  border-radius: 5px;
+
+.playerModal--select-is-selected {
+  color: #7872E8;
 }
-#play:hover, #reset:hover {
-  opacity: 0.5;
-}
-#error {
-  color: red;
+
+.icon-caret {
+  float: right;
   font-size: 10px;
-  font-weight: 400;
-  padding: 5px;
+  color: #7872E8;
+  margin-top: 3px;
 }
-.row {
-  margin: auto;
+
+.playerModal--peopleIcon {
+  display: block;
+  width: 100px;
+  margin: 0 auto 15px;
 }
-.cell {
-  border: 5px solid #beb9b5;
-  float: left;
-  cursor: pointer;
+
+.playerModal--options {
+  color: #7872E8;
+  box-shadow: 0 0 5px #C5C3F4;
+  display: inline-block;
+  position: absolute;
+  top: 50px;
+  right: 0;
   background-color: white;
 }
-#game:not(.completed) .cell:hover {
-  background-color: #fef6eb;
+
+.playerModal--option {
+  padding: 10px;
+  cursor: pointer;
 }
-#game.completed {
+
+.playerModal--option:hover {
+  background-color: #F2F2F2;
+}
+
+.modalButton {
+  display: inline-block;
+  background-color: #7872E8;
+  margin-top: 20px;
+}
+
+.modalButton-is-disabled {
   opacity: 0.5;
+  cursor: default;
 }
-.cell.marker-x {
-  color: #c25b56;
+
+.playerModal--disclaimer {
+  color: #CCC;
+  font-size: 12px;
 }
-.cell.marker-o {
-  color: #96c0ce;
+
+.playerNameField--field {
+  position: relative;
+  border: 1px solid #C5C3F4;
+  margin: 20px auto;
+  cursor: pointer;
 }
-.cell.win {
-  background-color: #fef6eb;
+
+.playerNameField--field-is-filled {
+  border-color: #7872E8;
 }
-#game:after, .row:after {
-  display: block;
-  clear: both;
-  content: '';
+
+.playerNameField--prompt {
+  background-color: #C5C3F4;
+  color: white;
+  padding: 12px;
+  display: inline-block;
+  width: 60px;
 }
-.hide {
-  display: none;
+
+.playerNameField--prompt-is-filled {
+  background-color: #7872E8;
+}
+
+.playerNameField--input {
+  width: calc(100% - 110px);
+  display: inline-block;
+  padding: 10px;
+  border: 0;
+  font-size: 16px;
+}
+
+.playerNameField--input:focus {
+  outline: none;
 }
