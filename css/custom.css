@@ -1,223 +1,222 @@
 body {
-  margin: 0;
-  font-family: Helvetica, sans-serif;
-    color: rgba(255, 255, 255, 0.8);
-  font-weight: 300;
+  margin      : 0;
+  color       : rgba(255, 255, 255, 0.8);
+  font-family : Helvetica,
+                sans-serif;
+  font-weight : 300;
 }
 
 .start {
-  background-image: url('../images/landing1.png');
-  background-size: cover;
-  height: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  overflow: hidden;
+  position          : absolute;
+  top               : 0;
+  left              : 0;
+  width             : 100%;
+  height            : 100%;
+  overflow          : hidden;
+  background-image  : url('../images/landing1.png');
+  background-color  : #7CDFEB;
+  background-repeat : no-repeat;
+  background-size   : 100%;
 }
 
 .button {
-  border: 0;
-  text-transform: uppercase;
-  font-weight: 300;
-  font-size: 21px;
-  letter-spacing: 2px;
-  padding: 10px 35px;
-  display: block;
-  margin: auto;
-  cursor: pointer;
-  transition: background-color 300ms ease;
+  display        : block;
+  margin         : auto;
+  padding        : 10px 35px;
+  border         : 0;
+  text-transform : uppercase;
+  font-size      : 21px;
+  font-weight    : 300;
+  letter-spacing : 2px;
+  transition     : background-color 300ms ease;
+  cursor         : pointer;
 }
 
 .play {
-  background-color: #E1704B;
-  color: white;
-  margin-top: 39.3%;
+  margin-top       : 39.3%;
+  color            : white;
+  background-color : #E1704B;
 }
 
 .play:hover {
-  background-color: #B0322F;
+  background-color : #B0322F;
 }
 
 .play:focus {
-  outline: none;
+  outline : none;
 }
 
 .overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  position         : absolute;
+  top              : 0;
+  left             : 0;
+  width            : 100%;
+  height           : 100%;
+  background-color : rgba(0, 0, 0, 0.5);
 }
 
 .modal {
-  width: 600px;
-  background-color: white;
-  margin: 12% auto;
+  width            : 600px;
+  margin           : 12% auto;
+  background-color : white;
 }
 
 .modal--header {
-  background-color: #7872E8;
-  padding: 10px;
-  text-align: center;
-  font-size: 18px;
+  padding          : 10px;
+  background-color : #7872E8;
+  text-align       : center;
+  font-size        : 18px;
 }
 
 .modal--body {
-  padding: 20px;
+  padding : 20px;
 }
 
 .icon-close {
-  font-size: 18px;
-  -webkit-text-stroke: 1px #7872E8;
-  float: right;
+  font-size : 18px;
 }
 
 .playerModal--body {
-  width: 75%;
-  margin: 20px auto;
+  width  : 75%;
+  margin : 20px auto;
 }
 
 .playerModal--select {
-  position: relative;
-  border: 1px solid #7872E8;
-  color: #C5C3F4;
-  margin: 20px auto 5px;
-  padding: 12px;
-  cursor: pointer;
+  position : relative;
+  margin   : 20px auto 5px;
+  padding  : 12px;
+  color    : #C5C3F4;
+  border   : 1px solid #7872E8;
+  cursor   : pointer;
 }
 
 .playerModal--select-is-selected {
-  color: #7872E8;
+  color : #7872E8;
 }
 
 .icon-caret {
-  float: right;
-  font-size: 10px;
-  color: #7872E8;
-  margin-top: 3px;
+  float      : right;
+  margin-top : 3px;
+  color      : #7872E8;
+  font-size  : 10px;
 }
 
 .playerModal--peopleIcon {
-  display: block;
-  width: 100px;
-  margin: 0 auto 15px;
+  display : block;
+  width   : 100px;
+  margin  : 0 auto 15px;
 }
 
 .playerModal--options {
-  color: #7872E8;
-  box-shadow: 0 0 5px #C5C3F4;
-  display: inline-block;
-  position: absolute;
-  top: 50px;
-  right: 0;
-  background-color: white;
+  display          : inline-block;
+  position         : absolute;
+  top              : 50px;
+  right            : 0;
+  color            : #7872E8;
+  background-color : white;
+  box-shadow       : 0 0 5px #C5C3F4;
 }
 
 .playerModal--option {
-  padding: 10px;
-  cursor: pointer;
+  padding : 10px;
+  cursor  : pointer;
 }
 
 .playerModal--option:hover {
-  background-color: #F2F2F2;
+  background-color : #F2F2F2;
 }
 
 .modalButton {
-  display: inline-block;
-  background-color: #7872E8;
-  margin-top: 20px;
+  display          : inline-block;
+  margin-top       : 20px;
+  background-color : #7872E8;
 }
 
 .modalButton-is-disabled {
-  opacity: 0.5;
-  cursor: default;
+  opacity : 0.5;
+  cursor  : default;
 }
 
 .playerModal--disclaimer {
-  color: #CCC;
-  font-size: 12px;
+  color     : #CCC;
+  font-size : 12px;
 }
 
 .playerNameField--field {
-  position: relative;
-  border: 1px solid #C5C3F4;
-  margin: 20px auto;
-  cursor: pointer;
+  position : relative;
+  margin   : 20px auto;
+  border   : 1px solid #C5C3F4;
+  cursor   : pointer;
 }
 
 .playerNameField--field-is-filled {
-  border-color: #7872E8;
+  border-color : #7872E8;
 }
 
 .playerNameField--prompt {
-  background-color: #C5C3F4;
-  color: white;
-  padding: 12px;
-  display: inline-block;
-  width: 60px;
+  display          : inline-block;
+  width            : 60px;
+  padding          : 12px;
+  color            : white;
+  background-color : #C5C3F4;
 }
 
 .playerNameField--prompt-is-filled {
-  background-color: #7872E8;
+  background-color : #7872E8;
 }
 
 .playerNameField--input {
-  width: calc(100% - 110px);
-  display: inline-block;
-  padding: 10px;
-  border: 0;
-  font-size: 16px;
+  display   : inline-block;
+  width     : calc(100% - 110px);
+  padding   : 10px;
+  border    : 0;
+  font-size : 16px;
 }
 
 .playerNameField--input:focus {
-  outline: none;
+  outline : none;
 }
 
 .header {
-  border-top: 4px solid #7872E8;
-  color: #555;
-  letter-spacing: 1px;
-  font-size: 21px;
-  font-weight: 400;
-  text-align: center;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid #AAA;
-  padding-right: 36px;
+  display         : flex;
+  padding-right   : 36px;
+  color           : #555;
+  border-top      : 4px solid #7872E8;
+  border-bottom   : 1px solid #AAA;
+  text-align      : center;
+  align-items     : center;
+  font-size       : 21px;
+  font-weight     : 400;
+  justify-content : space-between;
+  letter-spacing  : 1px;
 }
 
 .header:after {
-  content: '';
-  display: block;
-  clear: both;
+  content : '';
+  display : block;
+  clear   : both;
 }
 
 .logo {
-  width: 200px;
-  float: left;
+  width : 200px;
+  float : left;
 }
 
 .title {
-  flex-grow: 1;
+  flex-grow : 1;
 }
 
 .rollDice {
-  background-color: #7872E8;
-  text-align: center;
-  padding: 24px;
-    border-bottom: 5px solid white;
+  padding          : 24px;
+  border-bottom    : 5px solid white;
+  background-color : #7872E8;
+  text-align       : center;
 }
 
 .content {
-  flex-grow: 1;
-  background-color: #DDD;
-  padding: 50px;
+  padding          : 50px;
+  background-color : #DDD;
+  flex-grow        : 1;
 }
 
-.header--close {
-  -webkit-text-stroke: 2px white;
-}
+.header--close {}

@@ -68,7 +68,7 @@ class Board extends React.PureComponent {
 
   render() {
     return (
-      <div>
+      <div className="wrapper">
         <header className="header">
           <img src="../images/logo.png" className="logo" />
           <div className="title">Climbing 2 Olympus</div>

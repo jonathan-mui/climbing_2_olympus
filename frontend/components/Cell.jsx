@@ -1,7 +1,7 @@
 import React from 'react';
 import classnames from 'classnames';
 
-const STARRED_SPACES = [4, 8, 11, 17, 21, 24, 30, 35, 40, 44, 48, 52, 56, 63, 68, 73];
+import { STARRED_SPACES } from '../constants';
 
 class Cell extends React.PureComponent {
   cellClasses() {

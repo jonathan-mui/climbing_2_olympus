@@ -3,9 +3,7 @@ import PlayerModal from './PlayerModal';
 import NamePlayerModal from './NamePlayerModal';
 import Board from './Board';
 
-const CHOOSE_PLAYERS = 'CHOOSE_PLAYERS';
-const NAME_PLAYERS = 'NAME_PLAYERS';
-const BOARD = 'BOARD';
+import { CHOOSE_PLAYERS, NAME_PLAYERS, BOARD } from '../constants';
 
 class Game extends React.PureComponent {
   constructor(props) {
@@ -33,7 +31,6 @@ class Game extends React.PureComponent {
   }
 
   render() {
-    console.log(this.state.nameOfPlayers)
     if (!this.state.phase) {
       return (
         <div className="start">

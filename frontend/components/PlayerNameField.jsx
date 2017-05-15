@@ -36,7 +36,7 @@ class PlayerNameField extends React.PureComponent {
 
     return (
       <div className={fieldClasses}>
-        <div className={promptClasses}>Player {this.props.val}</div>
+        <div className={promptClasses}>Player {this.props.val + 1}</div>
         <input className="playerNameField--input" type="text" value={this.state.name} onChange={this.handleChange} />
       </div>
     )
