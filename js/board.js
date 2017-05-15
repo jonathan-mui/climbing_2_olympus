@@ -1,4 +1,4 @@
-var Board = TTT.Board = function($el,rows) {
+var Board = CLIMBING2OLYMPUS.Board = function ($el, rows) {
   this.currentPlayer = 'x';
   this.rows = rows;
   this.moves = 0;
@@ -50,41 +50,41 @@ Board.prototype.checkWin = function() {
   return won;
 };
 
-Board.prototype.checkTie = function() {
-  if (this.moves == this.rows * this.rows) {
-    return true;
-  }
-};
+// Board.prototype.checkTie = function() {
+//   if (this.moves == this.rows * this.rows) {
+//     return true;
+//   }
+// };
 
-_validWins = function(rows) {
-  var validWins = [];
-  diag = [];
-  diag2 = [];
-  for (i = 0; i < rows; i++) {
-    hori = [];
-    vert = [];
-    for (j = 0; j < rows; j++) {
-      hori.push([i,j]);
-      vert.push([j,i]);
-    }
-    diag.push([i,i]);
-    diag2.push([i,rows-1-i]);
-    validWins.push(hori);
-    validWins.push(vert);
-  }
-  validWins.push(diag2);
-  validWins.push(diag);
-  return validWins;
-};
+// _validWins = function(rows) {
+//   var validWins = [];
+//   diag = [];
+//   diag2 = [];
+//   for (i = 0; i < rows; i++) {
+//     hori = [];
+//     vert = [];
+//     for (j = 0; j < rows; j++) {
+//       hori.push([i,j]);
+//       vert.push([j,i]);
+//     }
+//     diag.push([i,i]);
+//     diag2.push([i,rows-1-i]);
+//     validWins.push(hori);
+//     validWins.push(vert);
+//   }
+//   validWins.push(diag2);
+//   validWins.push(diag);
+//   return validWins;
+// };
 
-_blankboard = function(n) {
-  var grid = [];
-  for (i = 0; i < n; i++) {
-    row = [];
-    for (j = 0; j < n; j++) {
-      row.push('.');
-    }
-    grid.push(row);
-  }
-  return grid;
-};
+// _blankboard = function(n) {
+//   var grid = [];
+//   for (i = 0; i < n; i++) {
+//     row = [];
+//     for (j = 0; j < n; j++) {
+//       row.push('.');
+//     }
+//     grid.push(row);
+//   }
+//   return grid;
+// };

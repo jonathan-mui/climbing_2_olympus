@@ -1,10 +1,10 @@
 (function() {
-  if (typeof TTT === 'undefined') {
-    window.TTT = {};
+  if (typeof CLIMBING2OLYMPUS === 'undefined') {
+    window.CLIMBING2OLYMPUS = {};
   }
 })();
 
-var Game = TTT.Game = function($el,rows,$reset,$announcement) {
+var Game = CLIMBING2OLYMPUS.Game = function($el,rows,$reset,$announcement) {
   this.board = new Board($el,rows, $reset);
   this.rows = rows;
   this.$el = $el;
