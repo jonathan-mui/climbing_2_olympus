@@ -1,0 +1,40 @@
+.container {
+  display: flex;
+}
+.leftSidebar {
+  background-color: #C5C3F4;
+  width: 400px;
+  box-shadow: 0 5px 10px rgba(0,0, 0, 0.3);
+  z-index: 5;
+}
+.grid {
+  width: 700px;
+  margin: auto;
+}
+
+.row:after {
+  clear: both;
+  display: block;
+  content: '';
+}
+
+.row-reverse {
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+.cell {
+  border: 1px solid white;
+  width: 50px;
+  height: 50px;
+  float: left;
+
+  box-sizing: border-box;
+  background-image: url('../images/cellbg.png');
+  background-size: cover;
+}
+
+.cell-starred {
+  background-image: url('../images/starcell.png');
+
+}

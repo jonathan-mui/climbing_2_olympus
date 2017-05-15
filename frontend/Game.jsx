@@ -1,10 +1,11 @@
 import React from 'react';
 import PlayerModal from './PlayerModal';
 import NamePlayerModal from './NamePlayerModal';
+import Board from './Board';
 
 const CHOOSE_PLAYERS = 'CHOOSE_PLAYERS';
 const NAME_PLAYERS = 'NAME_PLAYERS';
-const PLAY = 'PLAY';
+const BOARD = 'BOARD';
 
 class Game extends React.PureComponent {
   constructor(props) {
@@ -27,7 +28,7 @@ class Game extends React.PureComponent {
   }
 
   saveNamesAndStartGame() {
-    this.setState({ phase: PLAY });
+    this.setState({ phase: BOARD });
   }
 
   render() {
@@ -55,9 +56,9 @@ class Game extends React.PureComponent {
       )
     }
 
-    if (this.state.phase === PLAY) {
+    if (this.state.phase === BOARD) {
       return (
-        <div>PLAY</div>
+        <Board />
       )
     }
 
