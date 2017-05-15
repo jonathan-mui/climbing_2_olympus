@@ -1,23 +1,43 @@
-// 76 positions
-// _newPlayers(['jon', 'jane', 'joe'])
-
 var Board = CLIMBING2OLYMPUS.board = function (playerNames) {
-  this.colorOrder = ['orange', 'green', 'red'];
+  this.colorOrder = ['orange', 'green', 'red', 'brown', 'black'];
   this.players = _newPlayers(playerNames);
   this.currentPlayer = this.players.first;
   this.boardPositions = 75; // number of steps on the board.
   this.beginningStepPosition = 0;
   this.endStepPosition = 76;
-  this.starredSpaces = [4,8,11,17,21,24,30,35,40,44,48,52,56,63,68,73]
+  this.starredSpaces = [4,8,11,17,21,24,30,35,40,44,48,52,56,63,68,73];
+  this.chanceCardTypes = ['anotherTurn', 'skipATurn', 'allBack3Spaces', 'forward5Spaces', 'back2Spaces']
   this.board = _blankBoard();
 };
+
+Board.prototype.anotherTurn = function () {
+  // TODO
+}
+
+Board.prototype.skipATurn = function () {
+  // TODO
+}
+
+Board.prototype.allBack3Spaces = function () {
+  this.players.forEach(function (player) {
+    this.movePlayer(player, 5);
+  })
+}
+
+Board.prototype.forward5Spaces = function (player) {
+  this.movePlayer(player, 5);
+}
+
+Board.prototype.back2Spaces = function (player) {
+  this.movePlayer(player, -2);
+}
 
 Board.prototype.rollDice = function() {
   return Math.floor(Math.random() * 6) + 1;
 }
 
-Board.prototype.onStarredSpace = function(player) {
-  return this.starredSpaces.includes(player.position)
+Board.prototype.isStarredSpace = function(position) {
+  return this.starredSpaces.includes(position)
 }
 
 Board.prototype.validPosition = function (newPosition) {
@@ -27,14 +47,15 @@ Board.prototype.validPosition = function (newPosition) {
 
 // This will return the player or undefined
 Board.prototype.checkForWinner = function() {
-  return this.players.find(function(player) {
-    // will this fail because of the wrong 'this'?
-    return player.position == this.endStepPosition
-  });
+  return this.playerAtPosition(this.endStepPosition);
 };
 
-Board.prototype.checkIfOccupied = function(player, ) {
-  // TODO
+// This returns the player at the given position, otherwise undefined
+Board.prototype.playerAtPosition = function(newPosition) {
+  return this.players.find(function(player) {
+    // TODO: will this fail because of the wrong 'this'?
+    return player.position == newPosition
+  });
 };
 
 Board.prototype.movePlayer = function(player, travelingDistance) {
@@ -44,8 +65,18 @@ Board.prototype.movePlayer = function(player, travelingDistance) {
     destinationPosition = 0;
   }
 
-  if (validPosition(destinationPosition)) {
+  if (this.validPosition(destinationPosition) {
+    var playerAtDestination = this.playerAtPosition(destinationPosition)
+    if (playerAtDestination != undefined) {
+      playerAtDestination.position = player.position;
+      if (isStarredSpace(playerAtDestination.position)) {
+        alert('playerAtDestination on a starredSpace');
+      }
+    }
     player.position = destinationPosition;
+    if (isStarredSpace(player.position)) {
+      alert('player on a starredSpace');
+    }
   }
 };
 
@@ -67,38 +98,4 @@ _newPlayers = function(playerNames) {
 
 _blankBoard = function(n) {
   return new Array(this.boardSteps);
-};
-
-
-// OLD CODE BELOW //
-
-
-
-Board.prototype.swapPlayer = function() {
-  if (this.currentPlayer == 'x') {
-    this.currentPlayer = 'o';
-  } else {
-    this.currentPlayer = 'x';
-  }
-};
-
-_validWins = function(rows) {
-  var validWins = [];
-  diag = [];
-  diag2 = [];
-  for (i = 0; i < rows; i++) {
-    hori = [];
-    vert = [];
-    for (j = 0; j < rows; j++) {
-      hori.push([i,j]);
-      vert.push([j,i]);
-    }
-    diag.push([i,i]);
-    diag2.push([i,rows-1-i]);
-    validWins.push(hori);
-    validWins.push(vert);
-  }
-  validWins.push(diag2);
-  validWins.push(diag);
-  return validWins;
 };
