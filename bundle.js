@@ -11797,7 +11797,8 @@ var Game = function (_React$PureComponent) {
       numOfPlayers: null,
       nameOfPlayers: undefined,
       playerPositions: undefined,
-      cardModalInstructions: null
+      cardModalInstructions: null,
+      activePlayerId: 1
     };
     _this.startOver = _this.startOver.bind(_this);
     _this.playGame = _this.playGame.bind(_this);
@@ -11853,7 +11854,7 @@ var Game = function (_React$PureComponent) {
       if (this.isStarredSpace(newPlayerPositions[idx])) {
         this.triggerCardDrawFor(idx);
       }
-      // TODO: change active player; move to game.jsx from board.jsx
+      this.nextPlayerTurn();
     }
   }, {
     key: 'triggerCardDrawFor',
@@ -11938,6 +11939,11 @@ var Game = function (_React$PureComponent) {
       this.setPlayerPosition(idx, godSpace - that.state.playerPositions[idx]);
     }
   }, {
+    key: 'nextPlayerTurn',
+    value: function nextPlayerTurn() {
+      this.setState({ activePlayerId: this.state.activePlayerId % this.state.numOfPlayers + 1 });
+    }
+  }, {
     key: 'render',
     value: function render() {
       if (!this.state.phase) {
@@ -11979,7 +11985,8 @@ var Game = function (_React$PureComponent) {
           startOver: this.startOver,
           setPlayerPosition: this.setPlayerPosition,
           cardModalInstructions: this.state.cardModalInstructions,
-          closeCardModal: this.closeCardModal
+          closeCardModal: this.closeCardModal,
+          activePlayerId: this.state.activePlayerId
         });
       }
     }

@@ -21,6 +21,7 @@ class Game extends React.PureComponent {
       nameOfPlayers: undefined,
       playerPositions: undefined,
       cardModalInstructions: null,
+      activePlayerId: 1
     }
     this.startOver = this.startOver.bind(this);
     this.playGame = this.playGame.bind(this);
@@ -69,7 +70,7 @@ class Game extends React.PureComponent {
     if (this.isStarredSpace(newPlayerPositions[idx])) {
       this.triggerCardDrawFor(idx);
     }
-    // TODO: change active player; move to game.jsx from board.jsx
+    this.nextPlayerTurn();
   }
 
   triggerCardDrawFor(idx) {
@@ -138,6 +139,10 @@ class Game extends React.PureComponent {
     this.setPlayerPosition(idx, godSpace - that.state.playerPositions[idx]);
   }
 
+  nextPlayerTurn() {
+    this.setState({ activePlayerId: ((this.state.activePlayerId) % this.state.numOfPlayers) + 1 });
+  }
+
   render() {
     if (!this.state.phase) {
       return (
@@ -176,6 +181,7 @@ class Game extends React.PureComponent {
           setPlayerPosition={this.setPlayerPosition}
           cardModalInstructions={this.state.cardModalInstructions}
           closeCardModal={this.closeCardModal}
+          activePlayerId={this.state.activePlayerId}
         />
       )
     }
