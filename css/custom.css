@@ -191,6 +191,7 @@ body {
   border-bottom: 1px solid #aaa;
   align-items: center;
   justify-content: space-between;
+  flex-shrink: 0;
 }
 
 .header:after {
