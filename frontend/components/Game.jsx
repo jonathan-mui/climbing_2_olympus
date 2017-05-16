@@ -13,12 +13,15 @@ class Game extends React.PureComponent {
       numOfPlayers: null,
       nameOfPlayers: undefined,
       playerPositions: undefined,
+      cardModalInstructions: null,
     }
     this.startOver = this.startOver.bind(this);
     this.playGame = this.playGame.bind(this);
     this.saveNumOfPlayers = this.saveNumOfPlayers.bind(this);
     this.saveNamesAndStartGame = this.saveNamesAndStartGame.bind(this);
     this.setPlayerPosition = this.setPlayerPosition.bind(this);
+    this.openCardModal = this.openCardModal.bind(this);
+    this.closeCardModal = this.closeCardModal.bind(this);
   }
 
   startOver() {
@@ -41,6 +44,15 @@ class Game extends React.PureComponent {
     let newPlayerPositions = this.state.playerPositions;
     newPlayerPositions[idx] = newPlayerPositions[idx] + pos;
     this.setState({ playerPositions: newPlayerPositions });
+  }
+
+  // pass instructions to open modal
+  openCardModal(instructions) {
+    this.setState({ cardModalInstructions: instructions });
+  }
+
+  closeCardModal() {
+    this.setState({ cardModalInstructions: null });
   }
 
   render() {
@@ -80,6 +92,8 @@ class Game extends React.PureComponent {
           playerPositions={this.state.playerPositions}
           startOver={this.startOver}
           setPlayerPosition={this.setPlayerPosition}
+          cardModalInstructions={this.state.cardModalInstructions}
+          closeCardModal={this.closeCardModal}
         />
       )
     }

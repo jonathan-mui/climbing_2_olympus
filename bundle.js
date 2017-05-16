@@ -11774,13 +11774,16 @@ var Game = function (_React$PureComponent) {
       phase: null,
       numOfPlayers: null,
       nameOfPlayers: undefined,
-      playerPositions: undefined
+      playerPositions: undefined,
+      cardModalInstructions: null
     };
     _this.startOver = _this.startOver.bind(_this);
     _this.playGame = _this.playGame.bind(_this);
     _this.saveNumOfPlayers = _this.saveNumOfPlayers.bind(_this);
     _this.saveNamesAndStartGame = _this.saveNamesAndStartGame.bind(_this);
     _this.setPlayerPosition = _this.setPlayerPosition.bind(_this);
+    _this.openCardModal = _this.openCardModal.bind(_this);
+    _this.closeCardModal = _this.closeCardModal.bind(_this);
     return _this;
   }
 
@@ -11810,6 +11813,19 @@ var Game = function (_React$PureComponent) {
       var newPlayerPositions = this.state.playerPositions;
       newPlayerPositions[idx] = newPlayerPositions[idx] + pos;
       this.setState({ playerPositions: newPlayerPositions });
+    }
+
+    // pass instructions to open modal
+
+  }, {
+    key: 'openCardModal',
+    value: function openCardModal(instructions) {
+      this.setState({ cardModalInstructions: instructions });
+    }
+  }, {
+    key: 'closeCardModal',
+    value: function closeCardModal() {
+      this.setState({ cardModalInstructions: null });
     }
   }, {
     key: 'render',
@@ -11852,7 +11868,9 @@ var Game = function (_React$PureComponent) {
           nameOfPlayers: this.state.nameOfPlayers,
           playerPositions: this.state.playerPositions,
           startOver: this.startOver,
-          setPlayerPosition: this.setPlayerPosition
+          setPlayerPosition: this.setPlayerPosition,
+          cardModalInstructions: this.state.cardModalInstructions,
+          closeCardModal: this.closeCardModal
         });
       }
     }
@@ -11924,6 +11942,10 @@ var _Cell2 = _interopRequireDefault(_Cell);
 var _Dice = __webpack_require__(99);
 
 var _Dice2 = _interopRequireDefault(_Dice);
+
+var _CardModal = __webpack_require__(205);
+
+var _CardModal2 = _interopRequireDefault(_CardModal);
 
 var _classnames = __webpack_require__(26);
 
@@ -12069,7 +12091,7 @@ var Board = function (_React$PureComponent) {
             _react2.default.createElement(
               'div',
               { className: 'rollDice' },
-              _react2.default.createElement(_Dice2.default, { rolling: this.state.rolling, currentDice: this.state.currentDice, setDice: this.setDice, rollDice: this.rollDice }),
+              _react2.default.createElement(_Dice2.default, { rolling: this.state.rolling, currentDice: this.state.currentDice, rollDice: this.rollDice }),
               'Click to roll the dice'
             ),
             _react2.default.createElement(
@@ -12098,7 +12120,11 @@ var Board = function (_React$PureComponent) {
             { className: 'content' },
             this.renderGrid()
           )
-        )
+        ),
+        _react2.default.createElement(_CardModal2.default, {
+          instructions: this.props.cardModalInstructions,
+          closeModal: this.props.closeCardModal
+        })
       );
     }
   }]);
@@ -25250,6 +25276,71 @@ function flattenChildren(children, selfDebugID) {
 
 module.exports = flattenChildren;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 205 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(14);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var CardModal = function (_React$PureComponent) {
+  _inherits(CardModal, _React$PureComponent);
+
+  function CardModal() {
+    _classCallCheck(this, CardModal);
+
+    return _possibleConstructorReturn(this, (CardModal.__proto__ || Object.getPrototypeOf(CardModal)).apply(this, arguments));
+  }
+
+  _createClass(CardModal, [{
+    key: "render",
+    value: function render() {
+      if (!this.props.instructions) return null;
+      return _react2.default.createElement(
+        "div",
+        { className: "overlay" },
+        _react2.default.createElement(
+          "div",
+          { className: "modal" },
+          _react2.default.createElement(
+            "div",
+            { className: "modal--body modal--body-card" },
+            _react2.default.createElement("i", { className: "icon ion-close icon-close", onClick: this.props.closeModal }),
+            _react2.default.createElement(
+              "div",
+              { className: "playerModal--body" },
+              _react2.default.createElement("img", { src: "../images/purplestar.png", className: "modal--icon" }),
+              this.props.instructions
+            )
+          )
+        )
+      );
+    }
+  }]);
+
+  return CardModal;
+}(_react2.default.PureComponent);
+
+exports.default = CardModal;
 
 /***/ })
 /******/ ]);

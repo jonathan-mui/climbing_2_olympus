@@ -71,6 +71,18 @@ body {
   padding: 20px;
 }
 
+.modal--body-card {
+  background-color: #7872e8;
+  font-size: 28px;
+  text-align: center;
+}
+
+.modal--icon {
+  width: 100px;
+  margin: auto;
+  display: block;
+}
+
 .icon-close {
   font-size: 18px;
   float: right;

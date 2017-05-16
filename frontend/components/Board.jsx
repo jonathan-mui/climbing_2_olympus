@@ -1,6 +1,7 @@
 import React from 'react';
 import Cell from './Cell';
 import Dice from './Dice';
+import CardModal from './CardModal';
 import classnames from 'classnames';
 
 import { ROLL_DICE_DURATION } from '../constants';
@@ -8,7 +9,7 @@ import { ROLL_DICE_DURATION } from '../constants';
 class Board extends React.PureComponent {
   constructor(props) {
     super(props);
-    this.state = { rolling: false, currentDice: 1, };
+    this.state = { rolling: false, currentDice: 1 };
     this.setDice = this.setDice.bind(this);
     this.rollDice = this.rollDice.bind(this);
   }
@@ -98,7 +99,7 @@ class Board extends React.PureComponent {
         <div className="container">
           <aside className="leftSidebar">
             <div className="rollDice">
-              <Dice rolling={this.state.rolling} currentDice={this.state.currentDice} setDice={this.setDice} rollDice={this.rollDice} />
+              <Dice rolling={this.state.rolling} currentDice={this.state.currentDice} rollDice={this.rollDice} />
               Click to roll the dice
             </div>
             <div>
@@ -118,6 +119,10 @@ class Board extends React.PureComponent {
             {this.renderGrid()}
           </div>
         </div>
+        <CardModal
+          instructions={this.props.cardModalInstructions}
+          closeModal={this.props.closeCardModal}
+        />
       </div>
     )
   }
