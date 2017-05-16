@@ -11771,7 +11771,7 @@ var Game = function (_React$PureComponent) {
     var _this = _possibleConstructorReturn(this, (Game.__proto__ || Object.getPrototypeOf(Game)).call(this, props));
 
     _this.state = {
-      phase: null,
+      phase: _constants.BOARD,
       numOfPlayers: null,
       nameOfPlayers: undefined,
       playerPositions: undefined
