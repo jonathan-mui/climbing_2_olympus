@@ -31,9 +31,8 @@ class Board extends React.PureComponent {
     return (
       <div className={classes} style={style}>
         {Array(numOfCells).fill('').map((el, idx) => {
-          if (this.props.playerPosition.indexOf(start + idx) !== -1) {
-            console.log(this.props.playerPosition.indexOf(start + idx) + 1)
-            return <Cell key={idx} id={start + idx} playerId={this.props.playerPosition.indexOf(start + idx) + 1}/>
+          if (this.props.playerPositions.indexOf(start + idx) !== -1) {
+            return <Cell key={idx} id={start + idx} playerId={this.props.playerPositions.indexOf(start + idx) + 1}/>
           }
           return <Cell key={idx} id={start + idx} />
         })}
@@ -85,6 +84,7 @@ class Board extends React.PureComponent {
   }
 
   setDice(val) {
+    this.props.setPlayerPosition(this.props.activePlayerId - 1, val);
     this.setState({ rolling: false, currentDice: val });
   }
 
@@ -131,7 +131,7 @@ class Board extends React.PureComponent {
 
 Board.defaultProps = {
   nameOfPlayers:['Oscar', 'Jonathan', 'Jean Paul', 'Twinkie', 'Andre', 'Dawn'],
-  playerPosition: [1, 5, 30, 20, 70, 44],
+  playerPositions: [1, 5, 30, 20, 70, 44],
   activePlayerId: 1,
 }
 

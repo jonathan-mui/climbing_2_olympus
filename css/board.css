@@ -55,6 +55,24 @@
   margin: 10px auto 30px;
 }
 
+.transition-enter {
+  opacity: 0.01;
+}
+
+.transition-enter.transition-enter-active {
+  opacity: 1;
+  transition: opacity 500ms ease-in;
+}
+
+.transition-leave {
+  opacity: 1;
+}
+
+.transition-leave.example-leave-active {
+  opacity: 0.01;
+  transition: opacity 300ms ease-in;
+}
+
 .board--players {
   font-size: 21px;
   padding: 24px;
