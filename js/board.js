@@ -1,90 +1,118 @@
-var Board = TTT.Board = function($el,rows) {
-  this.currentPlayer = 'x';
-  this.rows = rows;
-  this.moves = 0;
-  this.board = _blankboard(rows);
+// var daboard = new Board(['jon', 'joe', 'jake'])
+
+var Board = CLIMBING2OLYMPUS.board = function (playerNames) {
+    this.colorOrder = ["orange", "green", "red", "brown", "black"];
+    this.players = this.newPlayers(playerNames);
+    console.log(this.players);
+    this.currentPlayer = this.players[0];
+    this.boardPositions = 75; // number of steps on the board.
+    this.beginningStepPosition = 0;
+    this.endStepPosition = 76;
+    this.starredSpaces = [4, 8, 11, 17, 21, 24, 30, 35, 40, 44, 48, 52, 56, 63, 68, 73];
+    this.chanceCardTypes = ["anotherTurn", "skipATurn", "allBack3Spaces", "forward5Spaces", "back2Spaces"];
+    this.board = this.blankBoard();
 };
 
-Board.prototype.move = function(pos) {
-  var boardCell = this.board[pos[0]][pos[1]];
-  if (boardCell === '.') {
-    this.board[pos[0]][pos[1]] = this.currentPlayer;
-    this.moves += 1;
-    return this.currentPlayer;
-  } else {
-    return false;
-  }
+Board.prototype.anotherTurn = function () {
+    // TODO
+    console.log("TODO");
 };
 
-Board.prototype.swapPlayer = function() {
-  if (this.currentPlayer == 'x') {
-    this.currentPlayer = 'o';
-  } else {
-    this.currentPlayer = 'x';
-  }
+Board.prototype.skipATurn = function () {
+    // TODO
+    console.log("TODO");
 };
 
-Board.prototype.resetBoard = function() {
-  this.moves = 0;
-  this.board = _blankboard(this.rows);
-};
-
-Board.prototype.checkWin = function() {
-  var that = this;
-  won = false;
-  winning = [];
-  for (i = 0; i < this.rows; i++) {
-    winning.push(this.currentPlayer);
-  }
-  _validWins(this.rows).forEach(function(arr) {
-    var potential = [];
-    var potentialPos = [];
-    arr.forEach(function(cell) {
-      potential.push(that.board[cell[0]][cell[1]]);
-      potentialPos.push([cell[0], cell[1]]);
+Board.prototype.allBack3Spaces = function () {
+    this.players.forEach(function (player) {
+        this.movePlayer(player, 5);
     });
-    if (potential.toString() === winning.toString()) {
-      won = potentialPos;
-    }
-  });
-  return won;
 };
 
-Board.prototype.checkTie = function() {
-  if (this.moves == this.rows * this.rows) {
-    return true;
-  }
+Board.prototype.forward5Spaces = function (player) {
+    this.movePlayer(player, 5);
 };
 
-_validWins = function(rows) {
-  var validWins = [];
-  diag = [];
-  diag2 = [];
-  for (i = 0; i < rows; i++) {
-    hori = [];
-    vert = [];
-    for (j = 0; j < rows; j++) {
-      hori.push([i,j]);
-      vert.push([j,i]);
-    }
-    diag.push([i,i]);
-    diag2.push([i,rows-1-i]);
-    validWins.push(hori);
-    validWins.push(vert);
-  }
-  validWins.push(diag2);
-  validWins.push(diag);
-  return validWins;
+Board.prototype.back2Spaces = function (player) {
+    this.movePlayer(player, -2);
 };
 
-_blankboard = function(n) {
-  var grid = [];
-  for (i = 0; i < n; i++) {
-    row = [];
-    for (j = 0; j < n; j++) {
-      row.push('.');
-    }
-    grid.push(row);
-  }
-  return grid;
+Board.prototype.rollDice = function () {
+    return Math.floor(Math.random() * 6) + 1;
 };
+
+Board.prototype.isStarredSpace = function (position) {
+    return this.starredSpaces.includes(position);
+};
+
+Board.prototype.validPosition = function (newPosition) {
+    return newPosition >= this.beginningStepPosition &&
+           newPosition <= this.endStepPosition;
+};
+
+// This will return the player or undefined
+Board.prototype.checkForWinner = function () {
+    return this.playerAtPosition(this.endStepPosition);
+};
+
+// This returns the player at the given position, otherwise undefined
+Board.prototype.playerAtPosition = function (newPosition) {
+    return this.players.find(function (player) {
+        // TODO: will this fail because of the wrong 'this'?
+        return player.position === newPosition;
+    });
+};
+
+Board.prototype.movePlayer = function (player, travelingDistance) {
+    var destinationPosition = player.position + travelingDistance;
+    // never go below position 0
+    if (destinationPosition < 0) {
+        destinationPosition = 0;
+    }
+
+    if (this.validPosition(destinationPosition)) {
+        var playerAtDestination = this.playerAtPosition(destinationPosition);
+        if (playerAtDestination !== undefined) {
+            playerAtDestination.position = player.position;
+            if (isStarredSpace(playerAtDestination.position)) {
+                alert("playerAtDestination on a starredSpace");
+            }
+        }
+        player.position = destinationPosition;
+        if (isStarredSpace(player.position)) {
+            alert("player on a starredSpace");
+        }
+    }
+};
+
+Board.prototype.nextTurn = function () {
+    var currentPlayerIndex = this.players.indexOf(this.currentPlayer);
+    var nextPlayerIndex = (currentPlayerIndex + 1) % this.players.length;
+    this.currentPlayer = this.players[nextPlayerIndex];
+};
+
+// Setup stuff below //
+
+Board.prototype.resetBoard = function () {
+    this.currentPlayer = this.players[0];
+    this.board = this.blankBoard();
+};
+
+Board.prototype.newPlayers = function (playerNames) {
+    var that = this;
+    var players = [];
+    playerNames.forEach(function (name, i) {
+        players.push({
+            name: name,
+            color: that.colorOrder[i] // TODO: bad use of this?
+        });
+    });
+    return players;
+};
+
+Board.prototype.blankBoard = function () {
+    return new Array(this.boardSteps);
+};
+
+
+// var daboard = new Board(['jon', 'joe', 'jake'])
