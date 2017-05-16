@@ -108,8 +108,7 @@ class Game extends React.PureComponent {
   pickRandomChanceCard() {
     let randIndex = Math.floor(Math.random() * Object.keys(CARD_CHANCE_TYPES).length);
     let cardType = Object.keys(CARD_CHANCE_TYPES)[randIndex]
-    // return CARD_CHANCE_TYPES[cardType];
-    return CARD_CHANCE_TYPES['moveToNextGod'];
+    return CARD_CHANCE_TYPES[cardType];
   }
 
   allBack3Spaces() {
