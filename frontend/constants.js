@@ -7,3 +7,20 @@ export const ORANGE_STARRED_SPACES = [35, 56];
 export const PLAYER_COLORS = ['#92BF64', '#EAA845', '#B5405B', '#406DB2', '#B240AC', '#E5DF72'];
 export const ROLL_DICE_SPEED = 200; // ms
 export const ROLL_DICE_DURATION = 3000; // ms
+export const CARD_CHANCE_TYPES = {
+  "anotherTurn": {
+    title: 'Take another turn'
+  },
+  "allBack3Spaces": {
+    title: 'Everyone move back 3 spaces'
+  },
+  "forward5Spaces": {
+    title: 'Move forward 2 spaces'
+  },
+  "back2Spaces": {
+    title: 'Move back 2 spaces'
+  },
+  "moveToNextGod": {
+    title: 'Move forward to the nearest God'
+  }
+};

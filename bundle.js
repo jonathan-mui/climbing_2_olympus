@@ -3419,6 +3419,23 @@ var ORANGE_STARRED_SPACES = exports.ORANGE_STARRED_SPACES = [35, 56];
 var PLAYER_COLORS = exports.PLAYER_COLORS = ['#92BF64', '#EAA845', '#B5405B', '#406DB2', '#B240AC', '#E5DF72'];
 var ROLL_DICE_SPEED = exports.ROLL_DICE_SPEED = 200; // ms
 var ROLL_DICE_DURATION = exports.ROLL_DICE_DURATION = 3000; // ms
+var CARD_CHANCE_TYPES = exports.CARD_CHANCE_TYPES = {
+  "anotherTurn": {
+    title: 'Take another turn'
+  },
+  "allBack3Spaces": {
+    title: 'Everyone move back 3 spaces'
+  },
+  "forward5Spaces": {
+    title: 'Move forward 2 spaces'
+  },
+  "back2Spaces": {
+    title: 'Move back 2 spaces'
+  },
+  "moveToNextGod": {
+    title: 'Move forward to the nearest God'
+  }
+};
 
 /***/ }),
 /* 26 */
@@ -11812,6 +11829,7 @@ var Game = function (_React$PureComponent) {
     value: function setPlayerPosition(idx, pos) {
       var newPlayerPositions = this.state.playerPositions;
       newPlayerPositions[idx] = newPlayerPositions[idx] + pos;
+      // TODO more logic here on where they can move
       this.setState({ playerPositions: newPlayerPositions });
     }
 
@@ -11826,6 +11844,52 @@ var Game = function (_React$PureComponent) {
     key: 'closeCardModal',
     value: function closeCardModal() {
       this.setState({ cardModalInstructions: null });
+    }
+  }, {
+    key: 'playerAtPosition',
+    value: function playerAtPosition(pos) {
+      this.state.playerPositions.indexOf(pos);
+    }
+  }, {
+    key: 'isStarredSpace',
+    value: function isStarredSpace(pos) {
+      return _constants.STARRED_SPACES.includes(pos);
+    }
+  }, {
+    key: 'validPosition',
+    value: function validPosition(pos) {
+      return pos >= 0 && pos <= 76;
+    }
+  }, {
+    key: 'winningPosition',
+    value: function winningPosition(pos) {
+      return pos === 76;
+    }
+
+    // some card logic below //
+
+  }, {
+    key: 'pickRandomChanceCard',
+    value: function pickRandomChanceCard() {
+      var randIndex = Math.floor(Math.random() * _constants.CARD_CHANCE_TYPES.length) + 1;
+      _constants.CARD_CHANCE_TYPES[randIndex];
+    }
+  }, {
+    key: 'allBack3Spaces',
+    value: function allBack3Spaces() {
+      this.state.playerPositions.forEach(function (pp, i) {
+        setPlayerPosition(i, -3);
+      });
+    }
+  }, {
+    key: 'forward5Spaces',
+    value: function forward5Spaces(idx) {
+      setPlayerPosition(idx, 5);
+    }
+  }, {
+    key: 'back2Spaces',
+    value: function back2Spaces(idx) {
+      setPlayerPosition(idx, -2);
     }
   }, {
     key: 'render',
@@ -12268,7 +12332,7 @@ var Dice = function (_React$PureComponent) {
     key: 'randomDice',
     value: function randomDice() {
       this.timeout = setTimeout(this.randomDice.bind(this), _constants.ROLL_DICE_SPEED);
-      var nextDice = Math.floor(Math.random() * (6 - 1 + 1)) + 1;
+      var nextDice = Math.floor(Math.random() * 6) + 1;
       this.setState({
         randomDice: nextDice
       });
