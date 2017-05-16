@@ -3,7 +3,13 @@ import PlayerModal from './PlayerModal';
 import NamePlayerModal from './NamePlayerModal';
 import Board from './Board';
 
-import { CHOOSE_PLAYERS, NAME_PLAYERS, BOARD } from '../constants';
+import {
+  CHOOSE_PLAYERS,
+  NAME_PLAYERS,
+  BOARD,
+  CARD_CHANCE_TYPES,
+  STARRED_SPACES
+} from '../constants';
 
 class Game extends React.PureComponent {
   constructor(props) {
@@ -40,7 +46,40 @@ class Game extends React.PureComponent {
   setPlayerPosition(idx, pos) {
     let newPlayerPositions = this.state.playerPositions;
     newPlayerPositions[idx] = newPlayerPositions[idx] + pos;
+    // TODO more logic here on where they can move
     this.setState({ playerPositions: newPlayerPositions });
+  }
+
+  isStarredSpace(pos) {
+    return STARRED_SPACES.includes(pos);
+  }
+
+  validPosition(pos) {
+    return pos >= 0 && pos <= 76;
+  }
+
+  winningPosition(pos) {
+    return pos === 76;
+  }
+
+  // some card logic below //
+  pickRandomChanceCard() {
+    let randIndex = Math.floor(Math.random() * CARD_CHANCE_TYPES.length) + 1;
+    CARD_CHANCE_TYPES[randIndex];
+  }
+
+  allBack3Spaces() {
+    this.state.playerPositions.forEach(function (pp, i) {
+      setPlayerPosition(i, -3);
+    })
+  }
+
+  forward5Spaces(idx) {
+    setPlayerPosition(idx, 5);
+  }
+
+  back2Spaces(idx) {
+    setPlayerPosition(idx, -2);
   }
 
   render() {
