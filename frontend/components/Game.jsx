@@ -12,11 +12,13 @@ class Game extends React.PureComponent {
       phase: null,
       numOfPlayers: null,
       nameOfPlayers: undefined,
+      playerPositions: undefined,
     }
     this.startOver = this.startOver.bind(this);
     this.playGame = this.playGame.bind(this);
     this.saveNumOfPlayers = this.saveNumOfPlayers.bind(this);
     this.saveNamesAndStartGame = this.saveNamesAndStartGame.bind(this);
+    this.setPlayerPosition = this.setPlayerPosition.bind(this);
   }
 
   startOver() {
@@ -28,14 +30,21 @@ class Game extends React.PureComponent {
   }
 
   saveNumOfPlayers(val) {
-    this.setState({ phase: NAME_PLAYERS, numOfPlayers: val });
+    this.setState({ phase: NAME_PLAYERS, numOfPlayers: val, playerPositions: new Array(val).fill(null) });
   }
 
   saveNamesAndStartGame(names) {
     this.setState({ phase: BOARD, nameOfPlayers: names });
   }
 
+  setPlayerPosition(idx, pos) {
+    let newPlayerPositions = this.state.playerPositions;
+    newPlayerPositions[idx] = newPlayerPositions[idx] + pos;
+    this.setState({ playerPositions: newPlayerPositions });
+  }
+
   render() {
+    console.log(this.state.playerPositions)
     if (!this.state.phase) {
       return (
         <div className="start">
@@ -47,7 +56,7 @@ class Game extends React.PureComponent {
     if (this.state.phase === CHOOSE_PLAYERS) {
       return (
         <div className="start">
-          <PlayerModal saveNumOfPlayers={this.saveNumOfPlayers} />
+          <PlayerModal saveNumOfPlayers={this.saveNumOfPlayers} startOver={this.startOver} />
         </div>
       )
     }
@@ -55,14 +64,23 @@ class Game extends React.PureComponent {
     if (this.state.phase === NAME_PLAYERS) {
       return (
         <div className="start">
-          <NamePlayerModal numOfPlayers={this.state.numOfPlayers} saveNamesAndStartGame={this.saveNamesAndStartGame}/>
+          <NamePlayerModal
+            numOfPlayers={this.state.numOfPlayers}
+            saveNamesAndStartGame={this.saveNamesAndStartGame}
+            startOver={this.startOver}
+          />
         </div>
       )
     }
 
     if (this.state.phase === BOARD) {
       return (
-        <Board nameOfPlayers={this.state.nameOfPlayers} startOver={this.startOver}/>
+        <Board
+          nameOfPlayers={this.state.nameOfPlayers}
+          playerPositions={this.state.playerPositions}
+          startOver={this.startOver}
+          setPlayerPosition={this.setPlayerPosition}
+        />
       )
     }
 

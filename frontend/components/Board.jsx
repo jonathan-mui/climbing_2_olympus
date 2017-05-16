@@ -1,26 +1,39 @@
 import React from 'react';
 import Cell from './Cell';
+import Dice from './Dice';
 import classnames from 'classnames';
 
+import { ROLL_DICE_DURATION } from '../constants';
+
 class Board extends React.PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = { rolling: false, currentDice: 1, };
+    this.setDice = this.setDice.bind(this);
+    this.rollDice = this.rollDice.bind(this);
+  }
+
   renderGrid() {
     return Array(210).fill('.').map((el,idx) => {
       return <Cell key={idx} id={idx} />
     })
   }
 
-  renderRow(start, numOfCells, shift, reversed) {
+  renderRow(start, numOfCells, shiftSpaces, reversed) {
     const classes = classnames({
       row: true,
       'row-reverse': reversed,
     })
     const style = {
-      marginLeft: !reversed && `${shift}px`,
-      marginRight: reversed && `${shift}px`,
+      marginLeft: !reversed && `${45 * shiftSpaces}px`,
+      marginRight: reversed && `${45 * shiftSpaces}px`,
     }
     return (
       <div className={classes} style={style}>
         {Array(numOfCells).fill('').map((el, idx) => {
+          if (this.props.playerPositions.indexOf(start + idx) !== -1) {
+            return <Cell key={idx} id={start + idx} playerId={this.props.playerPositions.indexOf(start + idx) + 1}/>
+          }
           return <Cell key={idx} id={start + idx} />
         })}
       </div>
@@ -30,21 +43,21 @@ class Board extends React.PureComponent {
   renderGrid() {
     return (
       <div className="grid">
-        {this.renderRow(1, 8, 100)}
-        {this.renderRow(9, 1, 450)}
-        {this.renderRow(10, 1, 450)}
-        {this.renderRow(11, 10, 200, true)}
+        {this.renderRow(1, 8, 2)}
+        {this.renderRow(9, 1, 9)}
+        {this.renderRow(10, 1, 9)}
+        {this.renderRow(11, 10, 4, true)}
         {this.renderRow(21, 1)}
         {this.renderRow(22, 14)}
-        {this.renderRow(36, 1, 650)}
+        {this.renderRow(36, 1, 13)}
         {this.renderRow(37, 9, 0, true)}
-        {this.renderRow(46, 1, 250)}
-        {this.renderRow(47, 7, 250)}
-        {this.renderRow(54, 1, 550)}
-        {this.renderRow(55, 1, 550)}
-        {this.renderRow(56, 11, 100, true)}
-        {this.renderRow(67, 1, 50)}
-        {this.renderRow(68, 8, 50)}
+        {this.renderRow(46, 1, 5)}
+        {this.renderRow(47, 7, 5)}
+        {this.renderRow(54, 1, 11)}
+        {this.renderRow(55, 1, 11)}
+        {this.renderRow(56, 11, 2, true)}
+        {this.renderRow(67, 1, 1)}
+        {this.renderRow(68, 8, 1)}
       </div>
     )
   }
@@ -56,14 +69,28 @@ class Board extends React.PureComponent {
   }
 
   renderPlayerName(idx, name) {
+    const classes = classnames({
+      'board--player': true,
+      'board--player-is-active': this.props.activePlayerId === idx + 1,
+    });
     return (
-      <div key={idx} className="board--player">
+      <div key={idx} className={classes}>
         <div className={`board--playerNumber board--playerNumber-${idx + 1}`}>
           {this.getOrdinal(idx + 1)}
         </div>
         <div className="board--playerName">{name}</div>
       </div>
     )
+  }
+
+  setDice(val) {
+    this.props.setPlayerPosition(this.props.activePlayerId - 1, val);
+    this.setState({ rolling: false, currentDice: val });
+  }
+
+  rollDice(val) {
+    setTimeout(this.setDice.bind(this, val), ROLL_DICE_DURATION);
+    this.setState({ rolling: true });
   }
 
   render() {
@@ -77,6 +104,7 @@ class Board extends React.PureComponent {
         <div className="container">
           <aside className="leftSidebar">
             <div className="rollDice">
+              <Dice rolling={this.state.rolling} currentDice={this.state.currentDice} setDice={this.setDice} rollDice={this.rollDice} />
               Click to roll the dice
             </div>
             <div>
@@ -103,6 +131,8 @@ class Board extends React.PureComponent {
 
 Board.defaultProps = {
   nameOfPlayers:['Oscar', 'Jonathan', 'Jean Paul', 'Twinkie', 'Andre', 'Dawn'],
+  playerPositions: [1, 5, 30, 20, 70, 44],
+  activePlayerId: 1,
 }
 
 export default Board;
