@@ -3,7 +3,7 @@
 var Board = CLIMBING2OLYMPUS.board = function (playerNames) {
     this.colorOrder = ["orange", "green", "red", "brown", "black"];
     this.players = this.newPlayers(playerNames);
-    console.log(this.players);
+    // console.log(this.players);
     this.currentPlayer = this.players[0];
     this.boardPositions = 75; // number of steps on the board.
     this.beginningStepPosition = 0;
@@ -63,27 +63,27 @@ var Board = CLIMBING2OLYMPUS.board = function (playerNames) {
 //     });
 // };
 
-Board.prototype.movePlayer = function (player, travelingDistance) {
-    var destinationPosition = player.position + travelingDistance;
-    // never go below position 0
-    if (destinationPosition < 0) {
-        destinationPosition = 0;
-    }
-
-    if (this.validPosition(destinationPosition)) {
-        var playerAtDestination = this.playerAtPosition(destinationPosition);
-        if (playerAtDestination !== undefined) {
-            playerAtDestination.position = player.position;
-            if (isStarredSpace(playerAtDestination.position)) {
-                alert("playerAtDestination on a starredSpace");
-            }
-        }
-        player.position = destinationPosition;
-        if (isStarredSpace(player.position)) {
-            alert("player on a starredSpace");
-        }
-    }
-};
+// Board.prototype.movePlayer = function (player, travelingDistance) {
+//     var destinationPosition = player.position + travelingDistance;
+//     // never go below position 0
+//     if (destinationPosition < 0) {
+//         destinationPosition = 0;
+//     }
+//
+//     if (this.validPosition(destinationPosition)) {
+//         var playerAtDestination = this.playerAtPosition(destinationPosition);
+//         if (playerAtDestination !== undefined) {
+//             playerAtDestination.position = player.position;
+//             if (isStarredSpace(playerAtDestination.position)) {
+//                 alert("playerAtDestination on a starredSpace");
+//             }
+//         }
+//         player.position = destinationPosition;
+//         if (isStarredSpace(player.position)) {
+//             alert("player on a starredSpace");
+//         }
+//     }
+// };
 
 Board.prototype.nextTurn = function () {
     var currentPlayerIndex = this.players.indexOf(this.currentPlayer);

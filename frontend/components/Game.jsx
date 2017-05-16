@@ -8,7 +8,8 @@ import {
   NAME_PLAYERS,
   BOARD,
   CARD_CHANCE_TYPES,
-  STARRED_SPACES
+  STARRED_SPACES,
+  GOD_SPACES
 } from '../constants';
 
 class Game extends React.PureComponent {
@@ -47,6 +48,7 @@ class Game extends React.PureComponent {
   }
 
   setPlayerPosition(idx, pos) {
+    console.log('setPlayerPosition: ' + idx + ' : ' + pos);
     let newPlayerPositions = this.state.playerPositions;
     let destinationPosition = newPlayerPositions[idx] + pos
     // never go below position 0
@@ -61,19 +63,24 @@ class Game extends React.PureComponent {
             // TODO: trigger star card if previously occupying player swaps to a starred space
         }
         newPlayerPositions[idx] = destinationPosition;
-        if (this.isStarredSpace(newPlayerPositions[idx])) {
-            alert("newPlayerPositions[idx] on a starredSpace");
-        }
     }
 
     this.setState({ playerPositions: newPlayerPositions });
-    // TODO: after setting state, pick a card if on a starred position
+    if (this.isStarredSpace(newPlayerPositions[idx])) {
+      this.triggerCardDrawFor(idx);
+    }
     // TODO: change active player; move to game.jsx from board.jsx
   }
 
+  triggerCardDrawFor(idx) {
+    let card = this.pickRandomChanceCard();
+    this.openCardModal(card.title);
+    this[card.method](idx);
+  }
+
   // pass instructions to open modal
-  openCardModal(instructions) {
-    this.setState({ cardModalInstructions: instructions });
+  openCardModal(instructionText) {
+    this.setState({ cardModalInstructions: instructionText });
   }
 
   closeCardModal() {
@@ -98,26 +105,40 @@ class Game extends React.PureComponent {
 
   // some card logic below //
   pickRandomChanceCard() {
-    let randIndex = Math.floor(Math.random() * CARD_CHANCE_TYPES.length) + 1;
-    CARD_CHANCE_TYPES[randIndex];
+    let randIndex = Math.floor(Math.random() * Object.keys(CARD_CHANCE_TYPES).length);
+    let cardType = Object.keys(CARD_CHANCE_TYPES)[randIndex]
+    // return CARD_CHANCE_TYPES[cardType];
+    return CARD_CHANCE_TYPES['moveToNextGod'];
   }
 
   allBack3Spaces() {
+    var that = this;
     this.state.playerPositions.forEach(function (pp, i) {
-      setPlayerPosition(i, -3);
+      that.setPlayerPosition(i, -3);
     })
   }
 
   forward5Spaces(idx) {
-    setPlayerPosition(idx, 5);
+    this.setPlayerPosition(idx, 5);
   }
 
   back2Spaces(idx) {
-    setPlayerPosition(idx, -2);
+    this.setPlayerPosition(idx, -2);
+  }
+
+  moveToNextGod(idx) {
+    var that = this;
+    let godSpace = GOD_SPACES.find(function (element) {
+      return element > that.state.playerPositions[idx];
+    })
+    let destinationPosition = 0;
+    if (godSpace >= 0) {
+      destinationPosition = godSpace;
+    }
+    this.setPlayerPosition(idx, godSpace - that.state.playerPositions[idx]);
   }
 
   render() {
-    console.log(this.state.playerPositions)
     if (!this.state.phase) {
       return (
         <div className="start">

@@ -3,14 +3,14 @@ import classnames from 'classnames';
 import Player from './Player';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
-import { STARRED_SPACES, ORANGE_SPACES, ORANGE_STARRED_SPACES } from '../constants';
+import { STARRED_SPACES, GOD_SPACES, ORANGE_STARRED_SPACES } from '../constants';
 
 class Cell extends React.PureComponent {
   cellClasses() {
     return classnames({
       cell: true,
       'cell-starred': STARRED_SPACES.indexOf(this.props.id) !== -1,
-      'cell-orange': ORANGE_SPACES.indexOf(this.props.id) !== -1,
+      'cell-orange': GOD_SPACES.indexOf(this.props.id) !== -1,
       'cell-orangeStarred': ORANGE_STARRED_SPACES.indexOf(this.props.id) !== -1,
     })
   }

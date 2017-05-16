@@ -3414,25 +3414,30 @@ var CHOOSE_PLAYERS = exports.CHOOSE_PLAYERS = 'CHOOSE_PLAYERS';
 var NAME_PLAYERS = exports.NAME_PLAYERS = 'NAME_PLAYERS';
 var BOARD = exports.BOARD = 'BOARD';
 var STARRED_SPACES = exports.STARRED_SPACES = [4, 8, 11, 17, 21, 24, 30, 35, 40, 44, 48, 52, 56, 63, 68, 73];
-var ORANGE_SPACES = exports.ORANGE_SPACES = [1, 15, 47, 67, 75];
+var GOD_SPACES = exports.GOD_SPACES = [1, 15, 47, 67, 75];
 var ORANGE_STARRED_SPACES = exports.ORANGE_STARRED_SPACES = [35, 56];
 var PLAYER_COLORS = exports.PLAYER_COLORS = ['#92BF64', '#EAA845', '#B5405B', '#406DB2', '#B240AC', '#E5DF72'];
-var ROLL_DICE_SPEED = exports.ROLL_DICE_SPEED = 200; // ms
-var ROLL_DICE_DURATION = exports.ROLL_DICE_DURATION = 3000; // ms
+var ROLL_DICE_SPEED = exports.ROLL_DICE_SPEED = 300; // ms
+var ROLL_DICE_DURATION = exports.ROLL_DICE_DURATION = 1000; // ms
 var CARD_CHANCE_TYPES = exports.CARD_CHANCE_TYPES = {
-  "anotherTurn": {
-    title: 'Take another turn'
-  },
+  // "anotherTurn": {
+  //   method: 'anotherTurn',
+  //   title: 'Take another turn'
+  // },
   "allBack3Spaces": {
+    method: 'allBack3Spaces',
     title: 'Everyone move back 3 spaces'
   },
   "forward5Spaces": {
-    title: 'Move forward 2 spaces'
+    method: 'forward5Spaces',
+    title: 'Move forward 5 spaces'
   },
   "back2Spaces": {
+    method: 'back2Spaces',
     title: 'Move back 2 spaces'
   },
   "moveToNextGod": {
+    method: 'moveToNextGod',
     title: 'Move forward to the nearest God'
   }
 };
@@ -11827,18 +11832,43 @@ var Game = function (_React$PureComponent) {
   }, {
     key: 'setPlayerPosition',
     value: function setPlayerPosition(idx, pos) {
+      console.log('setPlayerPosition: ' + idx + ' : ' + pos);
       var newPlayerPositions = this.state.playerPositions;
-      newPlayerPositions[idx] = newPlayerPositions[idx] + pos;
-      // TODO more logic here on where they can move
+      var destinationPosition = newPlayerPositions[idx] + pos;
+      // never go below position 0
+      if (destinationPosition < 0) {
+        destinationPosition = 0;
+      }
+
+      if (this.validPosition(destinationPosition)) {
+        var occupyingPlayerIndex = this.indexOfPlayerAtPosition(destinationPosition);
+        if (occupyingPlayerIndex > 0) {
+          newPlayerPositions[occupyingPlayerIndex] = newPlayerPositions[idx];
+          // TODO: trigger star card if previously occupying player swaps to a starred space
+        }
+        newPlayerPositions[idx] = destinationPosition;
+      }
+
       this.setState({ playerPositions: newPlayerPositions });
+      if (this.isStarredSpace(newPlayerPositions[idx])) {
+        this.triggerCardDrawFor(idx);
+      }
+      // TODO: change active player; move to game.jsx from board.jsx
+    }
+  }, {
+    key: 'triggerCardDrawFor',
+    value: function triggerCardDrawFor(idx) {
+      var card = this.pickRandomChanceCard();
+      this.openCardModal(card.title);
+      this[card.method](idx);
     }
 
     // pass instructions to open modal
 
   }, {
     key: 'openCardModal',
-    value: function openCardModal(instructions) {
-      this.setState({ cardModalInstructions: instructions });
+    value: function openCardModal(instructionText) {
+      this.setState({ cardModalInstructions: instructionText });
     }
   }, {
     key: 'closeCardModal',
@@ -11846,8 +11876,8 @@ var Game = function (_React$PureComponent) {
       this.setState({ cardModalInstructions: null });
     }
   }, {
-    key: 'playerAtPosition',
-    value: function playerAtPosition(pos) {
+    key: 'indexOfPlayerAtPosition',
+    value: function indexOfPlayerAtPosition(pos) {
       this.state.playerPositions.indexOf(pos);
     }
   }, {
@@ -11871,30 +11901,45 @@ var Game = function (_React$PureComponent) {
   }, {
     key: 'pickRandomChanceCard',
     value: function pickRandomChanceCard() {
-      var randIndex = Math.floor(Math.random() * _constants.CARD_CHANCE_TYPES.length) + 1;
-      _constants.CARD_CHANCE_TYPES[randIndex];
+      var randIndex = Math.floor(Math.random() * Object.keys(_constants.CARD_CHANCE_TYPES).length);
+      var cardType = Object.keys(_constants.CARD_CHANCE_TYPES)[randIndex];
+      // return CARD_CHANCE_TYPES[cardType];
+      return _constants.CARD_CHANCE_TYPES['moveToNextGod'];
     }
   }, {
     key: 'allBack3Spaces',
     value: function allBack3Spaces() {
+      var that = this;
       this.state.playerPositions.forEach(function (pp, i) {
-        setPlayerPosition(i, -3);
+        that.setPlayerPosition(i, -3);
       });
     }
   }, {
     key: 'forward5Spaces',
     value: function forward5Spaces(idx) {
-      setPlayerPosition(idx, 5);
+      this.setPlayerPosition(idx, 5);
     }
   }, {
     key: 'back2Spaces',
     value: function back2Spaces(idx) {
-      setPlayerPosition(idx, -2);
+      this.setPlayerPosition(idx, -2);
+    }
+  }, {
+    key: 'moveToNextGod',
+    value: function moveToNextGod(idx) {
+      var that = this;
+      var godSpace = _constants.GOD_SPACES.find(function (element) {
+        return element > that.state.playerPositions[idx];
+      });
+      var destinationPosition = 0;
+      if (godSpace >= 0) {
+        destinationPosition = godSpace;
+      }
+      this.setPlayerPosition(idx, godSpace - that.state.playerPositions[idx]);
     }
   }, {
     key: 'render',
     value: function render() {
-      console.log(this.state.playerPositions);
       if (!this.state.phase) {
         return _react2.default.createElement(
           'div',
@@ -12323,7 +12368,7 @@ var Cell = function (_React$PureComponent) {
       return (0, _classnames2.default)({
         cell: true,
         'cell-starred': _constants.STARRED_SPACES.indexOf(this.props.id) !== -1,
-        'cell-orange': _constants.ORANGE_SPACES.indexOf(this.props.id) !== -1,
+        'cell-orange': _constants.GOD_SPACES.indexOf(this.props.id) !== -1,
         'cell-orangeStarred': _constants.ORANGE_STARRED_SPACES.indexOf(this.props.id) !== -1
       });
     }
@@ -12483,7 +12528,7 @@ var NamePlayerModal = function (_React$PureComponent) {
     value: function removeValidName(val) {
       var newValidNames = this.state.validNames;
       newValidNames.splice(this.state.validNames.indexOf(val), 1);
-      this.setState({ validNames: blah.splice(this.state.validNames.indexOf(val), 1) });
+      this.setState({ validNames: newValidNames.splice(this.state.validNames.indexOf(val), 1) });
     }
   }, {
     key: 'renderNameFields',
