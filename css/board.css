@@ -49,6 +49,14 @@
   background-image: url('../images/starcell.png');
 }
 
+.cell-orange {
+  background-image: url('../images/cellbg-orange.png');
+}
+
+.cell-orangeStarred {
+  background-image: url('../images/cellbg-orangestar.png');
+}
+
 .board--dice {
   display: block;
   width: 75px;

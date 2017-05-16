@@ -3414,6 +3414,8 @@ var CHOOSE_PLAYERS = exports.CHOOSE_PLAYERS = 'CHOOSE_PLAYERS';
 var NAME_PLAYERS = exports.NAME_PLAYERS = 'NAME_PLAYERS';
 var BOARD = exports.BOARD = 'BOARD';
 var STARRED_SPACES = exports.STARRED_SPACES = [4, 8, 11, 17, 21, 24, 30, 35, 40, 44, 48, 52, 56, 63, 68, 73];
+var ORANGE_SPACES = exports.ORANGE_SPACES = [1, 15, 47, 67, 75];
+var ORANGE_STARRED_SPACES = exports.ORANGE_STARRED_SPACES = [35, 56];
 var PLAYER_COLORS = exports.PLAYER_COLORS = ['#92BF64', '#EAA845', '#B5405B', '#406DB2', '#B240AC', '#E5DF72'];
 var ROLL_DICE_SPEED = exports.ROLL_DICE_SPEED = 200; // ms
 var ROLL_DICE_DURATION = exports.ROLL_DICE_DURATION = 3000; // ms
@@ -12172,7 +12174,9 @@ var Cell = function (_React$PureComponent) {
     value: function cellClasses() {
       return (0, _classnames2.default)({
         cell: true,
-        'cell-starred': _constants.STARRED_SPACES.indexOf(this.props.id) !== -1
+        'cell-starred': _constants.STARRED_SPACES.indexOf(this.props.id) !== -1,
+        'cell-orange': _constants.ORANGE_SPACES.indexOf(this.props.id) !== -1,
+        'cell-orangeStarred': _constants.ORANGE_STARRED_SPACES.indexOf(this.props.id) !== -1
       });
     }
   }, {
