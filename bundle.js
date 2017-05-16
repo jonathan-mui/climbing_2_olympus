@@ -3414,9 +3414,33 @@ var CHOOSE_PLAYERS = exports.CHOOSE_PLAYERS = 'CHOOSE_PLAYERS';
 var NAME_PLAYERS = exports.NAME_PLAYERS = 'NAME_PLAYERS';
 var BOARD = exports.BOARD = 'BOARD';
 var STARRED_SPACES = exports.STARRED_SPACES = [4, 8, 11, 17, 21, 24, 30, 35, 40, 44, 48, 52, 56, 63, 68, 73];
+var GOD_SPACES = exports.GOD_SPACES = [1, 15, 47, 67, 75];
+var ORANGE_STARRED_SPACES = exports.ORANGE_STARRED_SPACES = [35, 56];
 var PLAYER_COLORS = exports.PLAYER_COLORS = ['#92BF64', '#EAA845', '#B5405B', '#406DB2', '#B240AC', '#E5DF72'];
-var ROLL_DICE_SPEED = exports.ROLL_DICE_SPEED = 200; // ms
-var ROLL_DICE_DURATION = exports.ROLL_DICE_DURATION = 3000; // ms
+var ROLL_DICE_SPEED = exports.ROLL_DICE_SPEED = 300; // ms
+var ROLL_DICE_DURATION = exports.ROLL_DICE_DURATION = 1000; // ms
+var CARD_CHANCE_TYPES = exports.CARD_CHANCE_TYPES = {
+  // "anotherTurn": {
+  //   method: 'anotherTurn',
+  //   title: 'Take another turn'
+  // },
+  "allBack3Spaces": {
+    method: 'allBack3Spaces',
+    title: 'Everyone move back 3 spaces'
+  },
+  "forward5Spaces": {
+    method: 'forward5Spaces',
+    title: 'Move forward 5 spaces'
+  },
+  "back2Spaces": {
+    method: 'back2Spaces',
+    title: 'Move back 2 spaces'
+  },
+  "moveToNextGod": {
+    method: 'moveToNextGod',
+    title: 'Move forward to the nearest God'
+  }
+};
 
 /***/ }),
 /* 26 */
@@ -11772,13 +11796,17 @@ var Game = function (_React$PureComponent) {
       phase: null,
       numOfPlayers: null,
       nameOfPlayers: undefined,
-      playerPositions: undefined
+      playerPositions: undefined,
+      cardModalInstructions: null,
+      activePlayerId: 1
     };
     _this.startOver = _this.startOver.bind(_this);
     _this.playGame = _this.playGame.bind(_this);
     _this.saveNumOfPlayers = _this.saveNumOfPlayers.bind(_this);
     _this.saveNamesAndStartGame = _this.saveNamesAndStartGame.bind(_this);
     _this.setPlayerPosition = _this.setPlayerPosition.bind(_this);
+    _this.openCardModal = _this.openCardModal.bind(_this);
+    _this.closeCardModal = _this.closeCardModal.bind(_this);
     return _this;
   }
 
@@ -11805,14 +11833,118 @@ var Game = function (_React$PureComponent) {
   }, {
     key: 'setPlayerPosition',
     value: function setPlayerPosition(idx, pos) {
+      console.log('setPlayerPosition: ' + idx + ' : ' + pos);
       var newPlayerPositions = this.state.playerPositions;
-      newPlayerPositions[idx] = newPlayerPositions[idx] + pos;
+      var destinationPosition = newPlayerPositions[idx] + pos;
+      // never go below position 0
+      if (destinationPosition < 0) {
+        destinationPosition = 0;
+      }
+
+      if (this.validPosition(destinationPosition)) {
+        var occupyingPlayerIndex = this.indexOfPlayerAtPosition(destinationPosition);
+        if (occupyingPlayerIndex > 0) {
+          newPlayerPositions[occupyingPlayerIndex] = newPlayerPositions[idx];
+          // TODO: trigger star card if previously occupying player swaps to a starred space
+        }
+        newPlayerPositions[idx] = destinationPosition;
+      }
+
       this.setState({ playerPositions: newPlayerPositions });
+      if (this.isStarredSpace(newPlayerPositions[idx])) {
+        this.triggerCardDrawFor(idx);
+      }
+      this.nextPlayerTurn();
+    }
+  }, {
+    key: 'triggerCardDrawFor',
+    value: function triggerCardDrawFor(idx) {
+      var card = this.pickRandomChanceCard();
+      this.openCardModal(card.title);
+      this[card.method](idx);
+    }
+
+    // pass instructions to open modal
+
+  }, {
+    key: 'openCardModal',
+    value: function openCardModal(instructionText) {
+      this.setState({ cardModalInstructions: instructionText });
+    }
+  }, {
+    key: 'closeCardModal',
+    value: function closeCardModal() {
+      this.setState({ cardModalInstructions: null });
+    }
+  }, {
+    key: 'indexOfPlayerAtPosition',
+    value: function indexOfPlayerAtPosition(pos) {
+      this.state.playerPositions.indexOf(pos);
+    }
+  }, {
+    key: 'isStarredSpace',
+    value: function isStarredSpace(pos) {
+      return _constants.STARRED_SPACES.includes(pos);
+    }
+  }, {
+    key: 'validPosition',
+    value: function validPosition(pos) {
+      return pos >= 0 && pos <= 76;
+    }
+  }, {
+    key: 'winningPosition',
+    value: function winningPosition(pos) {
+      return pos === 76;
+    }
+
+    // some card logic below //
+
+  }, {
+    key: 'pickRandomChanceCard',
+    value: function pickRandomChanceCard() {
+      var randIndex = Math.floor(Math.random() * Object.keys(_constants.CARD_CHANCE_TYPES).length);
+      var cardType = Object.keys(_constants.CARD_CHANCE_TYPES)[randIndex];
+      return _constants.CARD_CHANCE_TYPES[cardType];
+    }
+  }, {
+    key: 'allBack3Spaces',
+    value: function allBack3Spaces() {
+      var that = this;
+      this.state.playerPositions.forEach(function (pp, i) {
+        that.setPlayerPosition(i, -3);
+      });
+    }
+  }, {
+    key: 'forward5Spaces',
+    value: function forward5Spaces(idx) {
+      this.setPlayerPosition(idx, 5);
+    }
+  }, {
+    key: 'back2Spaces',
+    value: function back2Spaces(idx) {
+      this.setPlayerPosition(idx, -2);
+    }
+  }, {
+    key: 'moveToNextGod',
+    value: function moveToNextGod(idx) {
+      var that = this;
+      var godSpace = _constants.GOD_SPACES.find(function (element) {
+        return element > that.state.playerPositions[idx];
+      });
+      var destinationPosition = 0;
+      if (godSpace >= 0) {
+        destinationPosition = godSpace;
+      }
+      this.setPlayerPosition(idx, godSpace - that.state.playerPositions[idx]);
+    }
+  }, {
+    key: 'nextPlayerTurn',
+    value: function nextPlayerTurn() {
+      this.setState({ activePlayerId: this.state.activePlayerId % this.state.numOfPlayers + 1 });
     }
   }, {
     key: 'render',
     value: function render() {
-      console.log(this.state.playerPositions);
       if (!this.state.phase) {
         return _react2.default.createElement(
           'div',
@@ -11850,7 +11982,10 @@ var Game = function (_React$PureComponent) {
           nameOfPlayers: this.state.nameOfPlayers,
           playerPositions: this.state.playerPositions,
           startOver: this.startOver,
-          setPlayerPosition: this.setPlayerPosition
+          setPlayerPosition: this.setPlayerPosition,
+          cardModalInstructions: this.state.cardModalInstructions,
+          closeCardModal: this.closeCardModal,
+          activePlayerId: this.state.activePlayerId
         });
       }
     }
@@ -11923,6 +12058,10 @@ var _Dice = __webpack_require__(99);
 
 var _Dice2 = _interopRequireDefault(_Dice);
 
+var _CardModal = __webpack_require__(205);
+
+var _CardModal2 = _interopRequireDefault(_CardModal);
+
 var _classnames = __webpack_require__(26);
 
 var _classnames2 = _interopRequireDefault(_classnames);
@@ -11952,13 +12091,6 @@ var Board = function (_React$PureComponent) {
   }
 
   _createClass(Board, [{
-    key: 'renderGrid',
-    value: function renderGrid() {
-      return Array(210).fill('.').map(function (el, idx) {
-        return _react2.default.createElement(_Cell2.default, { key: idx, id: idx });
-      });
-    }
-  }, {
     key: 'renderRow',
     value: function renderRow(start, numOfCells, shiftSpaces, reversed) {
       var _this2 = this;
@@ -12074,7 +12206,7 @@ var Board = function (_React$PureComponent) {
             _react2.default.createElement(
               'div',
               { className: 'rollDice' },
-              _react2.default.createElement(_Dice2.default, { rolling: this.state.rolling, currentDice: this.state.currentDice, setDice: this.setDice, rollDice: this.rollDice }),
+              _react2.default.createElement(_Dice2.default, { rolling: this.state.rolling, currentDice: this.state.currentDice, rollDice: this.rollDice }),
               'Click to roll the dice'
             ),
             _react2.default.createElement(
@@ -12103,7 +12235,11 @@ var Board = function (_React$PureComponent) {
             { className: 'content' },
             this.renderGrid()
           )
-        )
+        ),
+        _react2.default.createElement(_CardModal2.default, {
+          instructions: this.props.cardModalInstructions,
+          closeModal: this.props.closeCardModal
+        })
       );
     }
   }]);
@@ -12172,7 +12308,9 @@ var Cell = function (_React$PureComponent) {
     value: function cellClasses() {
       return (0, _classnames2.default)({
         cell: true,
-        'cell-starred': _constants.STARRED_SPACES.indexOf(this.props.id) !== -1
+        'cell-starred': _constants.STARRED_SPACES.indexOf(this.props.id) !== -1,
+        'cell-orange': _constants.GOD_SPACES.indexOf(this.props.id) !== -1,
+        'cell-orangeStarred': _constants.ORANGE_STARRED_SPACES.indexOf(this.props.id) !== -1
       });
     }
   }, {
@@ -12245,7 +12383,7 @@ var Dice = function (_React$PureComponent) {
     key: 'randomDice',
     value: function randomDice() {
       this.timeout = setTimeout(this.randomDice.bind(this), _constants.ROLL_DICE_SPEED);
-      var nextDice = Math.floor(Math.random() * (6 - 1 + 1)) + 1;
+      var nextDice = Math.floor(Math.random() * 6) + 1;
       this.setState({
         randomDice: nextDice
       });
@@ -12331,7 +12469,7 @@ var NamePlayerModal = function (_React$PureComponent) {
     value: function removeValidName(val) {
       var newValidNames = this.state.validNames;
       newValidNames.splice(this.state.validNames.indexOf(val), 1);
-      this.setState({ validNames: blah.splice(this.state.validNames.indexOf(val), 1) });
+      this.setState({ validNames: newValidNames.splice(this.state.validNames.indexOf(val), 1) });
     }
   }, {
     key: 'renderNameFields',
@@ -25253,6 +25391,71 @@ function flattenChildren(children, selfDebugID) {
 
 module.exports = flattenChildren;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 205 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(14);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var CardModal = function (_React$PureComponent) {
+  _inherits(CardModal, _React$PureComponent);
+
+  function CardModal() {
+    _classCallCheck(this, CardModal);
+
+    return _possibleConstructorReturn(this, (CardModal.__proto__ || Object.getPrototypeOf(CardModal)).apply(this, arguments));
+  }
+
+  _createClass(CardModal, [{
+    key: "render",
+    value: function render() {
+      if (!this.props.instructions) return null;
+      return _react2.default.createElement(
+        "div",
+        { className: "overlay" },
+        _react2.default.createElement(
+          "div",
+          { className: "modal" },
+          _react2.default.createElement(
+            "div",
+            { className: "modal--body modal--body-card" },
+            _react2.default.createElement("i", { className: "icon ion-close icon-close", onClick: this.props.closeModal }),
+            _react2.default.createElement(
+              "div",
+              { className: "playerModal--body" },
+              _react2.default.createElement("img", { src: "../images/purplestar.png", className: "modal--icon" }),
+              this.props.instructions
+            )
+          )
+        )
+      );
+    }
+  }]);
+
+  return CardModal;
+}(_react2.default.PureComponent);
+
+exports.default = CardModal;
 
 /***/ })
 /******/ ]);

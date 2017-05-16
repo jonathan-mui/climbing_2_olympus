@@ -23,7 +23,7 @@ class NamePlayerModal extends React.PureComponent {
   removeValidName(val) {
     const newValidNames = this.state.validNames;
     newValidNames.splice(this.state.validNames.indexOf(val), 1);
-    this.setState({ validNames: blah.splice(this.state.validNames.indexOf(val), 1) })
+    this.setState({ validNames: newValidNames.splice(this.state.validNames.indexOf(val), 1) })
   }
 
   renderNameFields() {

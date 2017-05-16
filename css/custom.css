@@ -71,6 +71,18 @@ body {
   padding: 20px;
 }
 
+.modal--body-card {
+  background-color: #7872e8;
+  font-size: 28px;
+  text-align: center;
+}
+
+.modal--icon {
+  width: 100px;
+  margin: auto;
+  display: block;
+}
+
 .icon-close {
   font-size: 18px;
   float: right;
@@ -191,6 +203,7 @@ body {
   border-bottom: 1px solid #aaa;
   align-items: center;
   justify-content: space-between;
+  flex-shrink: 0;
 }
 
 .header:after {
@@ -219,8 +232,9 @@ body {
   padding: 80px;
   background-color: #ddd;
   background-image: url('../images/gods.png');
-  background-position: -220px -35px;
-  background-size: 1300px;
+  background-repeat: no-repeat;
+  background-position: center -35px;
+  background-size: 1000px;
   flex-grow: 1;
 }
 

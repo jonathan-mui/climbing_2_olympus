@@ -13,7 +13,7 @@ class Dice extends React.PureComponent {
 
   randomDice() {
     this.timeout = setTimeout(this.randomDice.bind(this), ROLL_DICE_SPEED);
-    const nextDice = Math.floor(Math.random() * (6 - 1 + 1)) + 1;
+    const nextDice = Math.floor(Math.random() * 6) + 1;
     this.setState({
       randomDice: nextDice,
     })

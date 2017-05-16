@@ -3,7 +3,14 @@ import PlayerModal from './PlayerModal';
 import NamePlayerModal from './NamePlayerModal';
 import Board from './Board';
 
-import { CHOOSE_PLAYERS, NAME_PLAYERS, BOARD } from '../constants';
+import {
+  CHOOSE_PLAYERS,
+  NAME_PLAYERS,
+  BOARD,
+  CARD_CHANCE_TYPES,
+  STARRED_SPACES,
+  GOD_SPACES
+} from '../constants';
 
 class Game extends React.PureComponent {
   constructor(props) {
@@ -13,12 +20,16 @@ class Game extends React.PureComponent {
       numOfPlayers: null,
       nameOfPlayers: undefined,
       playerPositions: undefined,
+      cardModalInstructions: null,
+      activePlayerId: 1
     }
     this.startOver = this.startOver.bind(this);
     this.playGame = this.playGame.bind(this);
     this.saveNumOfPlayers = this.saveNumOfPlayers.bind(this);
     this.saveNamesAndStartGame = this.saveNamesAndStartGame.bind(this);
     this.setPlayerPosition = this.setPlayerPosition.bind(this);
+    this.openCardModal = this.openCardModal.bind(this);
+    this.closeCardModal = this.closeCardModal.bind(this);
   }
 
   startOver() {
@@ -38,13 +49,100 @@ class Game extends React.PureComponent {
   }
 
   setPlayerPosition(idx, pos) {
+    console.log('setPlayerPosition: ' + idx + ' : ' + pos);
     let newPlayerPositions = this.state.playerPositions;
-    newPlayerPositions[idx] = newPlayerPositions[idx] + pos;
+    let destinationPosition = newPlayerPositions[idx] + pos
+    // never go below position 0
+    if (destinationPosition < 0) {
+        destinationPosition = 0;
+    }
+
+    if (this.validPosition(destinationPosition)) {
+        var occupyingPlayerIndex = this.indexOfPlayerAtPosition(destinationPosition);
+        if (occupyingPlayerIndex > 0) {
+            newPlayerPositions[occupyingPlayerIndex] = newPlayerPositions[idx];
+            // TODO: trigger star card if previously occupying player swaps to a starred space
+        }
+        newPlayerPositions[idx] = destinationPosition;
+    }
+
     this.setState({ playerPositions: newPlayerPositions });
+    if (this.isStarredSpace(newPlayerPositions[idx])) {
+      this.triggerCardDrawFor(idx);
+    }
+    this.nextPlayerTurn();
+  }
+
+  triggerCardDrawFor(idx) {
+    let card = this.pickRandomChanceCard();
+    this.openCardModal(card.title);
+    this[card.method](idx);
+  }
+
+  // pass instructions to open modal
+  openCardModal(instructionText) {
+    this.setState({ cardModalInstructions: instructionText });
+  }
+
+  closeCardModal() {
+    this.setState({ cardModalInstructions: null });
+  }
+
+  indexOfPlayerAtPosition(pos) {
+    this.state.playerPositions.indexOf(pos)
+  }
+
+  isStarredSpace(pos) {
+    return STARRED_SPACES.includes(pos);
+  }
+
+  validPosition(pos) {
+    return pos >= 0 && pos <= 76;
+  }
+
+  winningPosition(pos) {
+    return pos === 76;
+  }
+
+  // some card logic below //
+  pickRandomChanceCard() {
+    let randIndex = Math.floor(Math.random() * Object.keys(CARD_CHANCE_TYPES).length);
+    let cardType = Object.keys(CARD_CHANCE_TYPES)[randIndex]
+    return CARD_CHANCE_TYPES[cardType];
+  }
+
+  allBack3Spaces() {
+    var that = this;
+    this.state.playerPositions.forEach(function (pp, i) {
+      that.setPlayerPosition(i, -3);
+    })
+  }
+
+  forward5Spaces(idx) {
+    this.setPlayerPosition(idx, 5);
+  }
+
+  back2Spaces(idx) {
+    this.setPlayerPosition(idx, -2);
+  }
+
+  moveToNextGod(idx) {
+    var that = this;
+    let godSpace = GOD_SPACES.find(function (element) {
+      return element > that.state.playerPositions[idx];
+    })
+    let destinationPosition = 0;
+    if (godSpace >= 0) {
+      destinationPosition = godSpace;
+    }
+    this.setPlayerPosition(idx, godSpace - that.state.playerPositions[idx]);
+  }
+
+  nextPlayerTurn() {
+    this.setState({ activePlayerId: ((this.state.activePlayerId) % this.state.numOfPlayers) + 1 });
   }
 
   render() {
-    console.log(this.state.playerPositions)
     if (!this.state.phase) {
       return (
         <div className="start">
@@ -80,6 +178,9 @@ class Game extends React.PureComponent {
           playerPositions={this.state.playerPositions}
           startOver={this.startOver}
           setPlayerPosition={this.setPlayerPosition}
+          cardModalInstructions={this.state.cardModalInstructions}
+          closeCardModal={this.closeCardModal}
+          activePlayerId={this.state.activePlayerId}
         />
       )
     }
