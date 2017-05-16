@@ -48,9 +48,27 @@ class Game extends React.PureComponent {
 
   setPlayerPosition(idx, pos) {
     let newPlayerPositions = this.state.playerPositions;
-    newPlayerPositions[idx] = newPlayerPositions[idx] + pos;
-    // TODO more logic here on where they can move
+    let destinationPosition = newPlayerPositions[idx] + pos
+    // never go below position 0
+    if (destinationPosition < 0) {
+        destinationPosition = 0;
+    }
+
+    if (this.validPosition(destinationPosition)) {
+        var occupyingPlayerIndex = this.indexOfPlayerAtPosition(destinationPosition);
+        if (occupyingPlayerIndex > 0) {
+            newPlayerPositions[occupyingPlayerIndex] = newPlayerPositions[idx];
+            // TODO: trigger star card if previously occupying player swaps to a starred space
+        }
+        newPlayerPositions[idx] = destinationPosition;
+        if (this.isStarredSpace(newPlayerPositions[idx])) {
+            alert("newPlayerPositions[idx] on a starredSpace");
+        }
+    }
+
     this.setState({ playerPositions: newPlayerPositions });
+    // TODO: after setting state, pick a card if on a starred position
+    // TODO: change active player; move to game.jsx from board.jsx
   }
 
   // pass instructions to open modal
@@ -62,7 +80,7 @@ class Game extends React.PureComponent {
     this.setState({ cardModalInstructions: null });
   }
 
-  playerAtPosition(pos) {
+  indexOfPlayerAtPosition(pos) {
     this.state.playerPositions.indexOf(pos)
   }
 
