@@ -14,15 +14,15 @@ export const CARD_CHANCE_TYPES = {
   // },
   "allBack3Spaces": {
     method: 'allBack3Spaces',
-    title: 'Everyone move back 3 spaces'
+    title: 'Everyone move back 3 extra spaces'
   },
   "forward5Spaces": {
     method: 'forward5Spaces',
-    title: 'Move forward 5 spaces'
+    title: 'Move forward 5 extra spaces'
   },
   "back2Spaces": {
     method: 'back2Spaces',
-    title: 'Move back 2 spaces'
+    title: 'Move back 2 extra spaces'
   },
   "moveToNextGod": {
     method: 'moveToNextGod',
