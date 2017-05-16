@@ -1,5 +1,6 @@
 import React from 'react';
 import classnames from 'classnames';
+import Player from './Player';
 
 import { STARRED_SPACES } from '../constants';
 
@@ -13,7 +14,9 @@ class Cell extends React.PureComponent {
 
   render() {
     return (
-      <div className={this.cellClasses()} id={this.props.id} />
+      <div className={this.cellClasses()} id={this.props.id}>
+        {this.props.playerId && <Player id={this.props.playerId}/>}
+      </div>
     );
   }
 }

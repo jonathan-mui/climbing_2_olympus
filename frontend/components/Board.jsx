@@ -9,18 +9,22 @@ class Board extends React.PureComponent {
     })
   }
 
-  renderRow(start, numOfCells, shift, reversed) {
+  renderRow(start, numOfCells, shiftSpaces, reversed) {
     const classes = classnames({
       row: true,
       'row-reverse': reversed,
     })
     const style = {
-      marginLeft: !reversed && `${shift}px`,
-      marginRight: reversed && `${shift}px`,
+      marginLeft: !reversed && `${45 * shiftSpaces}px`,
+      marginRight: reversed && `${45 * shiftSpaces}px`,
     }
     return (
       <div className={classes} style={style}>
         {Array(numOfCells).fill('').map((el, idx) => {
+          if (this.props.playerPosition.indexOf(start + idx) !== -1) {
+            console.log(this.props.playerPosition.indexOf(start + idx) + 1)
+            return <Cell key={idx} id={start + idx} playerId={this.props.playerPosition.indexOf(start + idx) + 1}/>
+          }
           return <Cell key={idx} id={start + idx} />
         })}
       </div>
@@ -30,21 +34,21 @@ class Board extends React.PureComponent {
   renderGrid() {
     return (
       <div className="grid">
-        {this.renderRow(1, 8, 100)}
-        {this.renderRow(9, 1, 450)}
-        {this.renderRow(10, 1, 450)}
-        {this.renderRow(11, 10, 200, true)}
+        {this.renderRow(1, 8, 2)}
+        {this.renderRow(9, 1, 9)}
+        {this.renderRow(10, 1, 9)}
+        {this.renderRow(11, 10, 4, true)}
         {this.renderRow(21, 1)}
         {this.renderRow(22, 14)}
-        {this.renderRow(36, 1, 650)}
+        {this.renderRow(36, 1, 13)}
         {this.renderRow(37, 9, 0, true)}
-        {this.renderRow(46, 1, 250)}
-        {this.renderRow(47, 7, 250)}
-        {this.renderRow(54, 1, 550)}
-        {this.renderRow(55, 1, 550)}
-        {this.renderRow(56, 11, 100, true)}
-        {this.renderRow(67, 1, 50)}
-        {this.renderRow(68, 8, 50)}
+        {this.renderRow(46, 1, 5)}
+        {this.renderRow(47, 7, 5)}
+        {this.renderRow(54, 1, 11)}
+        {this.renderRow(55, 1, 11)}
+        {this.renderRow(56, 11, 2, true)}
+        {this.renderRow(67, 1, 1)}
+        {this.renderRow(68, 8, 1)}
       </div>
     )
   }
@@ -103,6 +107,7 @@ class Board extends React.PureComponent {
 
 Board.defaultProps = {
   nameOfPlayers:['Oscar', 'Jonathan', 'Jean Paul', 'Twinkie', 'Andre', 'Dawn'],
+  playerPosition: [1, 5, 30, 20, 70, 44],
 }
 
 export default Board;

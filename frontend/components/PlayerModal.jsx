@@ -78,7 +78,7 @@ class PlayerModal extends React.PureComponent {
         <div className="modal">
           <div className="modal--header">
             How many players are playing?
-            <i className="icon ion-close icon-close" />
+            <i className="icon ion-close icon-close" onClick={this.props.startOver} />
           </div>
           <div className="modal--body">
             <div className="playerModal--body">
