@@ -11771,7 +11771,7 @@ var Game = function (_React$PureComponent) {
     var _this = _possibleConstructorReturn(this, (Game.__proto__ || Object.getPrototypeOf(Game)).call(this, props));
 
     _this.state = {
-      phase: _constants.BOARD,
+      phase: null,
       numOfPlayers: null,
       nameOfPlayers: undefined,
       playerPositions: undefined
@@ -11954,13 +11954,6 @@ var Board = function (_React$PureComponent) {
   }
 
   _createClass(Board, [{
-    key: 'renderGrid',
-    value: function renderGrid() {
-      return Array(210).fill('.').map(function (el, idx) {
-        return _react2.default.createElement(_Cell2.default, { key: idx, id: idx });
-      });
-    }
-  }, {
     key: 'renderRow',
     value: function renderRow(start, numOfCells, shiftSpaces, reversed) {
       var _this2 = this;

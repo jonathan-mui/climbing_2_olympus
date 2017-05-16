@@ -13,12 +13,6 @@ class Board extends React.PureComponent {
     this.rollDice = this.rollDice.bind(this);
   }
 
-  renderGrid() {
-    return Array(210).fill('.').map((el,idx) => {
-      return <Cell key={idx} id={idx} />
-    })
-  }
-
   renderRow(start, numOfCells, shiftSpaces, reversed) {
     const classes = classnames({
       row: true,
