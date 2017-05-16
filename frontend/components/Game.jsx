@@ -54,23 +54,23 @@ class Game extends React.PureComponent {
     let destinationPosition = newPlayerPositions[idx] + pos
     // never go below position 0
     if (destinationPosition < 0) {
-        destinationPosition = 0;
+      destinationPosition = 0;
     }
 
     if (this.validPosition(destinationPosition)) {
-        var occupyingPlayerIndex = this.indexOfPlayerAtPosition(destinationPosition);
-        if (occupyingPlayerIndex > 0) {
-            newPlayerPositions[occupyingPlayerIndex] = newPlayerPositions[idx];
-            // TODO: trigger star card if previously occupying player swaps to a starred space
-        }
-        newPlayerPositions[idx] = destinationPosition;
+      let occupyingPlayerIndex = this.indexOfPlayerAtPosition(destinationPosition);
+      if (occupyingPlayerIndex >= 0) {
+        newPlayerPositions[occupyingPlayerIndex] = newPlayerPositions[idx];
+        // TODO: trigger star card if previously occupying player swaps to a starred space
+      }
+      newPlayerPositions[idx] = destinationPosition;
     }
 
-    this.setState({ playerPositions: newPlayerPositions });
     if (this.isStarredSpace(newPlayerPositions[idx])) {
       this.triggerCardDrawFor(idx);
     }
     this.nextPlayerTurn();
+    this.setState({ playerPositions: newPlayerPositions });
   }
 
   triggerCardDrawFor(idx) {
@@ -89,7 +89,7 @@ class Game extends React.PureComponent {
   }
 
   indexOfPlayerAtPosition(pos) {
-    this.state.playerPositions.indexOf(pos)
+    return this.state.playerPositions.indexOf(pos);
   }
 
   isStarredSpace(pos) {
