@@ -9,7 +9,7 @@ class Game extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      phase: null,
+      phase: BOARD,
       numOfPlayers: null,
       nameOfPlayers: undefined,
       playerPosition: undefined,

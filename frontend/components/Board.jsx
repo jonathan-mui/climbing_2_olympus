@@ -1,8 +1,18 @@
 import React from 'react';
 import Cell from './Cell';
+import Dice from './Dice';
 import classnames from 'classnames';
 
+import { ROLL_DICE_DURATION } from '../constants';
+
 class Board extends React.PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = { rolling: false, currentDice: 1, };
+    this.setDice = this.setDice.bind(this);
+    this.rollDice = this.rollDice.bind(this);
+  }
+
   renderGrid() {
     return Array(210).fill('.').map((el,idx) => {
       return <Cell key={idx} id={idx} />
@@ -74,6 +84,15 @@ class Board extends React.PureComponent {
     )
   }
 
+  setDice(val) {
+    this.setState({ rolling: false, currentDice: val });
+  }
+
+  rollDice(val) {
+    setTimeout(this.setDice.bind(this, val), ROLL_DICE_DURATION);
+    this.setState({ rolling: true });
+  }
+
   render() {
     return (
       <div className="wrapper">
@@ -85,6 +104,7 @@ class Board extends React.PureComponent {
         <div className="container">
           <aside className="leftSidebar">
             <div className="rollDice">
+              <Dice rolling={this.state.rolling} currentDice={this.state.currentDice} setDice={this.setDice} rollDice={this.rollDice} />
               Click to roll the dice
             </div>
             <div>
