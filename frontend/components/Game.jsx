@@ -50,6 +50,10 @@ class Game extends React.PureComponent {
     this.setState({ playerPositions: newPlayerPositions });
   }
 
+  playerAtPosition(pos) {
+    this.state.playerPositions.indexOf(pos)
+  }
+
   isStarredSpace(pos) {
     return STARRED_SPACES.includes(pos);
   }
