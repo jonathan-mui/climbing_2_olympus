@@ -60,8 +60,12 @@ class Board extends React.PureComponent {
   }
 
   renderPlayerName(idx, name) {
+    const classes = classnames({
+      'board--player': true,
+      'board--player-is-active': this.props.activePlayerId === idx + 1,
+    });
     return (
-      <div key={idx} className="board--player">
+      <div key={idx} className={classes}>
         <div className={`board--playerNumber board--playerNumber-${idx + 1}`}>
           {this.getOrdinal(idx + 1)}
         </div>
@@ -108,6 +112,7 @@ class Board extends React.PureComponent {
 Board.defaultProps = {
   nameOfPlayers:['Oscar', 'Jonathan', 'Jean Paul', 'Twinkie', 'Andre', 'Dawn'],
   playerPosition: [1, 5, 30, 20, 70, 44],
+  activePlayerId: 1,
 }
 
 export default Board;
